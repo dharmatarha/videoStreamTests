@@ -1,0 +1,161 @@
+The goal of this document is to show how we can query and test the capabilities of simple webcams / other video devices using ffmpeg. The following links contain a lot of relevant info about the details, I am inlcuding them here just in case: 
+https://trac.ffmpeg.org/wiki/Capture/Webcam
+https://superuser.com/questions/494575/ffmpeg-open-webcam-using-yuyv-but-i-want-mjpeg
+https://ffmpeg.org/ffmpeg-devices.html#video4linux2_002c-v4l2
+https://superuser.com/questions/1206838/low-latency-video-shared-in-local-gigabit-network-using-linux
+https://stackoverflow.com/questions/21213895/how-to-stream-live-videos-with-no-latency-ffplay-mplayer-and-what-kind-of-wra
+https://community.octoprint.org/t/using-ffmpeg-for-webcam-streaming-and-timelapse-support/5321/13
+
+
+
+Testing supported resolutions and frame rates for webcam / built-in camera with ffmpeg
+
+
+
+(1) Needed packages: ffmpeg, v4l-utils
+
+stim@stim-PC:~$ sudo apt install ffmpeg v4l-utils
+
+
+
+(2) Check for detected video devices and their supported formats from command line
+
+stim@stim-PC:~$ v4l2-ctl --list-devices
+
+Integrated Camera: Integrated C (usb-0000:00:14.0-6):
+	/dev/video0
+	/dev/video1
+
+
+
+(3) Check supported formats (encoding types):
+
+stim@stim-PC:~$ v4l2-ctl --list-formats
+
+ioctl: VIDIOC_ENUM_FMT
+	Index       : 0
+	Type        : Video Capture
+	Pixel Format: 'MJPG' (compressed)
+	Name        : Motion-JPEG
+
+	Index       : 1
+	Type        : Video Capture
+	Pixel Format: 'YUYV'
+	Name        : YUYV 4:2:2
+
+
+
+(4) Check details of formats (resolutions and frame rates included):
+
+stim@stim-PC:~$ v4l2-ctl --list-formats-ext
+
+ioctl: VIDIOC_ENUM_FMT
+	Index       : 0
+	Type        : Video Capture
+	Pixel Format: 'MJPG' (compressed)
+	Name        : Motion-JPEG
+		Size: Discrete 1280x720
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 320x180
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 320x240
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 352x288
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 424x240
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 640x360
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 640x480
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 848x480
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 960x540
+			Interval: Discrete 0.033s (30.000 fps)
+
+	Index       : 1
+	Type        : Video Capture
+	Pixel Format: 'YUYV'
+	Name        : YUYV 4:2:2
+		Size: Discrete 1280x720
+			Interval: Discrete 0.100s (10.000 fps)
+		Size: Discrete 320x180
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 320x240
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 352x288
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 424x240
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 640x360
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 640x480
+			Interval: Discrete 0.033s (30.000 fps)
+		Size: Discrete 848x480
+			Interval: Discrete 0.050s (20.000 fps)
+		Size: Discrete 960x540
+			Interval: Discrete 0.067s (15.000 fps)
+
+
+
+(5) Try recording with given format, resolution and frame rate with ffmpeg.
+Change the relevant settings for running it:
+
+stim@stim-PC:~$ ffmpeg -f v4l2 -framerate 30 -input_format mjpeg -video_size 960x540 -i /dev/video0 output.mkv
+
+ffmpeg version 3.4.8-0ubuntu0.2 Copyright (c) 2000-2020 the FFmpeg developers
+Input #0, video4linux2,v4l2, from '/dev/video0':
+  Duration: N/A, start: 16515.566128, bitrate: N/A
+    Stream #0:0: Video: mjpeg, yuvj422p(pc, bt470bg/unknown/unknown), 960x540, 30 fps, 30 tbr, 1000k tbn, 1000k tbc
+File 'output.mkv' already exists. Overwrite ? [y/N] y
+Stream mapping:
+  Stream #0:0 -> #0:0 (mjpeg (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+Output #0, matroska, to 'output.mkv':
+  Metadata:
+    encoder         : Lavf57.83.100
+    Stream #0:0: Video: h264 (libx264) (H264 / 0x34363248), yuvj422p(pc), 960x540, q=-1--1, 30 fps, 1k tbn, 30 tbc
+    Metadata:
+      encoder         : Lavc57.107.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: -1
+frame= 1205 fps= 30 q=-1.0 Lsize=    3373kB time=00:00:41.20 bitrate= 670.7kbits/s speed=1.04x    
+video:3364kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.276193%
+
+
+
+(6) Check if the recorded video indeed has the right resolution and frame rate:
+
+stim@stim-PC:~$ ffprobe output.mkv
+
+ffprobe version 3.4.8-0ubuntu0.2 Copyright (c) 2007-2020 the FFmpeg developers
+Input #0, matroska,webm, from 'output.mkv':
+  Metadata:
+    ENCODER         : Lavf57.83.100
+  Duration: 00:00:41.30, start: 0.000000, bitrate: 669 kb/s
+    Stream #0:0: Video: h264 (High 4:2:2), yuvj422p(pc, progressive), 960x540, 30 fps, 30 tbr, 1k tbn, 60 tbc (default)
+    Metadata:
+      ENCODER         : Lavc57.107.100 libx264
+      DURATION        : 00:00:41.300000000
+
+
+
+(7) Try to display the video while recording it:
+
+stim@stim-PC:~$ ffmpeg -f v4l2 -framerate 30 -input_format mjpeg -video_size 960x540 -i /dev/video0 -map 0 -c:v libx264 -f tee "output.mkv|[f=nut]pipe:" | ffplay pipe:
+
+You will see a bunch of information about the recorded / displayed video. For me this setting also came with considerable delay. Let's try to push that delay down:
+
+
+
+(8) Low-latency video recording + display. Added "-tune zerolatency" and "-fflags nobuffer":
+
+stim@stim-PC:~$ ffmpeg -f v4l2 -framerate 30 -input_format mjpeg -video_size 960x540 -i /dev/video0 -map 0 -c:v libx264 -tune zerolatency -f tee "output.mkv|[f=nut]pipe:" | ffplay -fflags nobuffer pipe:
+
+On my laptop this gives reasonable results, I would guess around ~400 ms delay. I am not sure how we could measure this with ffmpeg though.
+
+
+
+(9) Sacrificing quality by using mjpeg as encoder gives really nice results on the laptop, the video feels instantaneous:
+
+stim@stim-PC:~$ ffmpeg -f v4l2 -framerate 30 -input_format mjpeg -video_size 960x540 -i /dev/video0 -map 0 -c:v mjpeg -tune zerolatency -f tee "output.mkv|[f=nut]pipe:" | ffplay -fflags nobuffer pipe:
