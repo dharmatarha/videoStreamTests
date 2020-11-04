@@ -12,7 +12,6 @@ screen=max(Screen('Screens'));
 
 % Custom Gstreamer pipeline definition:
 capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert';
-% capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec';
 Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
 
 % Default codec:
@@ -28,7 +27,7 @@ try
     Screen('TextSize', win, 24);
     
     % Open video capture device
-    grabber = Screen('OpenVideoCapture', win, -9, [0 0 1280 720], 4, [], [], codec, 0, [], 8);
+    grabber = Screen('OpenVideoCapture', win, -9, [0 0 1280 720], [], [], [], codec, 0, [], 8);
     WaitSecs('YieldSecs', 2);
     KbReleaseWait;
 
@@ -57,13 +56,13 @@ try
         
     end  % while
 
-    % Done. Shut us down, report elapsed time
+    % Done, report elapsed time
     telapsed = GetSecs - startTime;
-    disp([newline, 'Elapsed time: ', num2str(round(telapsed, 2)), ' secs']);    
+    disp([newline, 'Elapsed time: ', num2str(round(telapsed, 2)), ' secs']);  
+    % Shutdown
     Screen('StopVideoCapture', grabber);  % Stop capture engine and recording  
     Screen('CloseVideoCapture', grabber);  % Close engine and recorded movie file
     sca;
-    
     % Report fps
     avgfps = count / telapsed;
     disp([newline, 'Average framerate: ', num2str(avgfps)]);

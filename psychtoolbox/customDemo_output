@@ -1,0 +1,235 @@
+customVideoRecordingDemo('customTest', [], 0, 1, 0);
+Recording to movie file customTest ...
+Using codec: :CodecType=DEFAULTencoder
+RandR: 1920x1080 (0x89)  148.5MHz
+        h: width  1920 start 2008 end 2052 total 2200 skew    0
+        v: height 1080 start 1084 end 1089 total 1125
+
+
+PTB-INFO: This is Psychtoolbox-3 for GNU/Linux X11, under Matlab 64-Bit (Version 3.0.16 - Build date: Mar 26 2020).
+PTB-INFO: OS support status: Linux 5.4.0-52-generic Supported.
+PTB-INFO: Type 'PsychtoolboxVersion' for more detailed version information.
+PTB-INFO: Most parts of the Psychtoolbox distribution are licensed to you under terms of the MIT License, with
+PTB-INFO: some restrictions. See file 'License.txt' in the Psychtoolbox root folder for the exact licensing conditions.
+
+PTB-DEBUG: Checking PCI device [Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers] with class x00060000 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16)] with class x00060400 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation HD Graphics 530] with class x00030000 ...
+PTB-INFO: Skipping detected Intel GPU for safety reasons. setenv('PSYCH_ALLOW_DANGEROUS', '1') to override.
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller] with class x000c0330 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family MEI Controller #1] with class x00078000 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation Q170/Q150/B150/H170/H110/Z170/CM236 Chipset SATA Controller [AHCI Mode]] with class x00010601 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family PCI Express Root Port #3] with class x00060400 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family PCI Express Root Port #4] with class x00060400 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family PCI Express Root Port #9] with class x00060400 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation H170 Chipset LPC/eSPI Controller] with class x00060100 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family Power Management Controller] with class x00058000 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family HD Audio Controller] with class x00040300 ...
+PTB-DEBUG: Checking PCI device [Intel Corporation 100 Series/C230 Series Chipset Family SMBus] with class x000c0500 ...
+PTB-DEBUG: Checking PCI device [ASMedia Technology Inc. ASM1083/1085 PCIe to PCI Bridge] with class x00060400 ...
+PTB-DEBUG: Checking PCI device [Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller] with class x00020000 ...
+PTB-INFO: No low-level controllable GPU on screenId 0. Beamposition timestamping and other special functions disabled.
+PTB-INFO: Using old-style override-redirect setup path for onscreen window creation.
+PTB-INFO: GLX Visual info depths is 24 bits
+PTB-INFO: Running on Mesa version 20.0.8
+PTB-INFO: This combo of X-Server and Mesa is considered safe for use under DRI3/Present.
+PTB-INFO: Using GLEW version 2.0.0 for automatic detection of OpenGL extensions...
+PTB-INFO: Window uses DRI3/Present for visual stimulus presentation.
+PTB-INFO: Using GLX_MESA_swap_control extension for control of vsync.
+PTB-INFO: Disabling VRR Variable Refresh Rate mode for this fullscreen window on Mesa graphics driver.
+PTB-INFO: INTEL_swap_event support for additional swap completion correctness checks enabled.
+PTB-INFO: Fixed point precision integer framebuffer enabled.
+PTB-INFO: System Frame buffer provides 8 bits for red channel.
+PTB-INFO: System Frame buffer provides 8 bits for green channel.
+PTB-INFO: System Frame buffer provides 8 bits for blue channel.
+PTB-INFO: System frame buffer provides 8 bits for alpha channel, but effective alpha bits depends on imaging pipeline setup, if any.
+PTB-DEBUG: PPM file magic is P6
+ -> Ok
+# CREATOR: GIMP PNM Filter Version 1.1
+PTB-DEBUG: Recognized splash image of 432 x 89 pixels, maxlevel 255. Loading...
+
+
+OpenGL-Vendor / renderer / version are: Intel Open Source Technology Center - Mesa DRI Intel(R) HD Graphics 530 (SKL GT2) - 3.0 Mesa 20.0.8
+
+
+OpenGL-Extensions are: GL_ARB_multisample GL_EXT_abgr GL_EXT_bgra GL_EXT_blend_color GL_EXT_blend_minmax GL_EXT_blend_subtract GL_EXT_copy_texture GL_EXT_subtexture GL_EXT_texture_object GL_EXT_vertex_array GL_EXT_compiled_vertex_array GL_EXT_texture GL_EXT_texture3D GL_IBM_rasterpos_clip GL_ARB_point_parameters GL_EXT_draw_range_elements GL_EXT_packed_pixels GL_EXT_point_parameters GL_EXT_rescale_normal GL_EXT_separate_specular_color GL_EXT_texture_edge_clamp GL_SGIS_generate_mipmap GL_SGIS_texture_border_clamp GL_SGIS_texture_edge_clamp GL_SGIS_texture_lod GL_ARB_framebuffer_sRGB GL_ARB_multitexture GL_EXT_framebuffer_sRGB GL_IBM_multimode_draw_arrays GL_IBM_texture_mirrored_repeat GL_3DFX_texture_compression_FXT1 GL_ARB_texture_cube_map GL_ARB_texture_env_add GL_ARB_transpose_matrix GL_EXT_blend_func_separate GL_EXT_fog_coord GL_EXT_multi_draw_arrays GL_EXT_secondary_color GL_EXT_texture_env_add GL_EXT_texture_filter_anisotropic GL_EXT_texture_lod_bias GL_INGR_blend_func_separate GL_NV_blend_square GL_NV_light_max_exponent GL_NV_texgen_reflection GL_NV_texture_env_combine4 GL_S3_s3tc GL_SUN_multi_draw_arrays GL_ARB_texture_border_clamp GL_ARB_texture_compression GL_EXT_framebuffer_object GL_EXT_texture_compression_s3tc GL_EXT_texture_env_combine GL_EXT_texture_env_dot3 GL_MESA_window_pos GL_NV_packed_depth_stencil GL_NV_texture_rectangle GL_ARB_depth_texture GL_ARB_occlusion_query GL_ARB_shadow GL_ARB_texture_env_combine GL_ARB_texture_env_crossbar GL_ARB_texture_env_dot3 GL_ARB_texture_mirrored_repeat GL_ARB_window_pos GL_EXT_stencil_two_side GL_EXT_texture_cube_map GL_NV_depth_clamp GL_NV_fog_distance GL_APPLE_packed_pixels GL_ARB_draw_buffers GL_ARB_fragment_program GL_ARB_fragment_shader GL_ARB_shader_objects GL_ARB_vertex_program GL_ARB_vertex_shader GL_ATI_draw_buffers GL_ATI_texture_env_combine3 GL_ATI_texture_float GL_EXT_shadow_funcs GL_EXT_stencil_wrap GL_MESA_pack_invert GL_NV_primitive_restart GL_ARB_depth_clamp GL_ARB_fragment_program_shadow GL_ARB_half_float_pixel GL_ARB_occlusion_query2 GL_ARB_point_sprite GL_ARB_shading_language_100 GL_ARB_sync GL_ARB_texture_non_power_of_two GL_ARB_vertex_buffer_object GL_ATI_blend_equation_separate GL_EXT_blend_equation_separate GL_OES_read_format GL_ARB_color_buffer_float GL_ARB_pixel_buffer_object GL_ARB_texture_compression_rgtc GL_ARB_texture_float GL_ARB_texture_rectangle GL_EXT_packed_float GL_EXT_pixel_buffer_object GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_rectangle GL_EXT_texture_sRGB GL_EXT_texture_shared_exponent GL_ARB_framebuffer_object GL_EXT_framebuffer_blit GL_EXT_framebuffer_multisample GL_EXT_packed_depth_stencil GL_APPLE_object_purgeable GL_ARB_vertex_array_object GL_ATI_separate_stencil GL_EXT_draw_buffers2 GL_EXT_draw_instanced GL_EXT_gpu_program_parameters GL_EXT_gpu_shader4 GL_EXT_texture_array GL_EXT_texture_integer GL_EXT_texture_sRGB_decode GL_EXT_timer_query GL_OES_EGL_image GL_AMD_texture_texture4 GL_ARB_copy_buffer GL_ARB_depth_buffer_float GL_ARB_draw_instanced GL_ARB_half_float_vertex GL_ARB_instanced_arrays GL_ARB_map_buffer_range GL_ARB_texture_rg GL_ARB_texture_swizzle GL_ARB_vertex_array_bgra GL_EXT_texture_swizzle GL_EXT_vertex_array_bgra GL_NV_conditional_render GL_AMD_conservative_depth GL_AMD_depth_clamp_separate GL_AMD_draw_buffers_blend GL_AMD_seamless_cubemap_per_texture GL_AMD_shader_stencil_export GL_ARB_ES2_compatibility GL_ARB_blend_func_extended GL_ARB_debug_output GL_ARB_draw_buffers_blend GL_ARB_draw_elements_base_vertex GL_ARB_explicit_attrib_location GL_ARB_fragment_coord_conventions GL_ARB_provoking_vertex GL_ARB_sample_shading GL_ARB_sampler_objects GL_ARB_seamless_cube_map GL_ARB_shader_stencil_export GL_ARB_shader_texture_lod GL_ARB_texture_cube_map_array GL_ARB_texture_gather GL_ARB_texture_multisample GL_ARB_texture_query_lod GL_ARB_texture_rgb10_a2ui GL_ARB_uniform_buffer_object GL_ARB_vertex_type_2_10_10_10_rev GL_EXT_provoking_vertex GL_EXT_texture_snorm GL_MESA_texture_signed_rgba GL_NV_texture_barrier GL_ARB_draw_indirect GL_ARB_get_program_binary GL_ARB_robustness GL_ARB_separate_shader_objects GL_ARB_shader_bit_encoding GL_ARB_shader_precision GL_ARB_texture_compression_bptc GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_EXT_direct_state_access GL_AMD_multi_draw_indirect GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ARB_compressed_texture_pixel_storage GL_ARB_conservative_depth GL_ARB_internalformat_query GL_ARB_map_buffer_alignment GL_ARB_shader_atomic_counters GL_ARB_shader_image_load_store GL_ARB_shading_language_420pack GL_ARB_shading_language_packing GL_ARB_texture_storage GL_ARB_transform_feedback_instanced GL_EXT_framebuffer_multisample_blit_scaled GL_EXT_transform_feedback GL_AMD_query_buffer_object GL_AMD_shader_trinary_minmax GL_ARB_ES3_compatibility GL_ARB_arrays_of_arrays GL_ARB_clear_buffer_object GL_ARB_compute_shader GL_ARB_copy_image GL_ARB_explicit_uniform_location GL_ARB_fragment_layer_viewport GL_ARB_framebuffer_no_attachments GL_ARB_invalidate_subdata GL_ARB_multi_draw_indirect GL_ARB_program_interface_query GL_ARB_robust_buffer_access_behavior GL_ARB_shader_image_size GL_ARB_shader_storage_buffer_object GL_ARB_stencil_texturing GL_ARB_texture_query_levels GL_ARB_texture_storage_multisample GL_ARB_texture_view GL_ARB_vertex_attrib_binding GL_KHR_debug GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_ARB_buffer_storage GL_ARB_clear_texture GL_ARB_indirect_parameters GL_ARB_internalformat_query2 GL_ARB_multi_bind GL_ARB_query_buffer_object GL_ARB_seamless_cubemap_per_texture GL_ARB_shader_draw_parameters GL_ARB_shader_group_vote GL_ARB_shading_language_include GL_ARB_texture_mirror_clamp_to_edge GL_ARB_texture_stencil8 GL_ARB_vertex_type_10f_11f_11f_rev GL_EXT_shader_framebuffer_fetch GL_EXT_shader_integer_mix GL_INTEL_performance_query GL_ARB_ES3_1_compatibility GL_ARB_clip_control GL_ARB_conditional_render_inverted GL_ARB_cull_distance GL_ARB_derivative_control GL_ARB_get_texture_sub_image GL_ARB_pipeline_statistics_query GL_ARB_shader_texture_image_samples GL_ARB_texture_barrier GL_ARB_transform_feedback_overflow_query GL_EXT_polygon_offset_clamp GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_context_flush_control GL_KHR_robust_buffer_access_behavior GL_ARB_fragment_shader_interlock GL_ARB_parallel_shader_compile GL_ARB_post_depth_coverage GL_ARB_shader_atomic_counter_ops GL_ARB_shader_ballot GL_ARB_shader_clock GL_EXT_shader_samples_identical GL_KHR_no_error GL_KHR_texture_compression_astc_sliced_3d GL_NV_fragment_shader_interlock GL_ARB_gl_spirv GL_ARB_spirv_extensions GL_MESA_shader_integer_functions GL_ARB_polygon_offset_clamp GL_ARB_texture_filter_anisotropic GL_KHR_parallel_shader_compile GL_EXT_EGL_image_storage GL_EXT_shader_framebuffer_fetch_non_coherent GL_EXT_texture_sRGB_R8 GL_EXT_texture_shadow_lod GL_INTEL_shader_atomic_float_minmax GL_INTEL_shader_integer_functions2 GL_NV_compute_shader_derivatives GL_EXT_EGL_sync GL_EXT_demote_to_helper_invocation 
+
+PTB-DEBUG: Running on Mesa version 20.0.8
+PTB-DEBUG: Vendor Id of render gpu - rendergpuVendor 0x8086.
+PTB-DEBUG: Linux X11 backend with non-NVidia blob drivers - Enabling locked pixeltoken-write + flush workaround for XLib thread-safety.
+PTB-DEBUG: Interrogating Low-level renderer capabilities for onscreen window with handle 10:
+Indicator variables: FBO's 1, ATI_texture_float 1, ARB_texture_float 1, Vendor Intel Open Source Technology Center, Renderer Mesa DRI Intel(R) HD Graphics 530 (SKL GT2).
+Indicator variables: maxcolorattachments = 8, maxrectangletexturesize = 16384, maxnativealuinstructions = 1024.
+GPU supports non-power-of-two textures.
+Hardware supports signed normalized textures of 16 bpc integer format.
+Basic framebuffer objects with rectangle texture rendertargets supported --> RGBA8 rendertargets with blending.
+Framebuffer objects support fast blitting between each other.
+Framebuffer objects support anti-aliasing via multisampling.
+Framebuffer objects support single-pass multisample resolve blits and image rescaling.
+Hardware supports floating point textures of 16bpc and 32bpc float format.
+Assuming HD graphics core or later: Hardware supports full 16/32 bit floating point textures, frame buffers, filtering and blending, as well as some 32 bit float shading.
+Float color value 0.5 -> fixed point reads back as 128 ==> Rounds.
+PTB-Info: Running on 'The X.Org Foundation' XServer, Vendor release 12008000.
+OML_sync_control indicators: glXGetSyncValuesOML=0x7f3d5a177d90 , glXWaitForMscOML=0x7f3d5a178150, glXWaitForSbcOML=0x7f3d5a1781f0, glXSwapBuffersMscOML=0x7f3d5a178090
+OML_sync_control indicators: glxewIsSupported() says 1.
+OML_sync_control indicators: glXQueryExtensionsString() says 1.
+System supports OpenML OML_sync_control extension for high-precision scheduled swaps and timestamping.
+OpenML OML_sync_control extension enabled for all scheduled swaps.
+System supports backbuffer age queries.
+PTB-DEBUG: Interrogation done.
+
+RandR: 1920x1080 (0x89)  148.5MHz
+        h: width  1920 start 2008 end 2052 total 2200 skew    0
+        v: height 1080 start 1084 end 1089 total 1125
+RandR: 1920x1080 (0x89)  148.5MHz
+        h: width  1920 start 2008 end 2052 total 2200 skew    0
+        v: height 1080 start 1084 end 1089 total 1125
+PTB-DEBUG: glClear splash image top-left reference pixel: 255 255 255
+PTB-INFO: Threshold Settings for successfull video refresh calibration are: maxStdDev = 0.200000 msecs, maxDeviation = 10.000000 %, minSamples = 50, maxDuration = 5.000000 secs.
+
+
+PTB-DEBUG: Output of all acquired samples of calibration run follows:
+PTB-DEBUG: Sample 0: 0.000000
+PTB-DEBUG: Sample 1: 0.016661
+PTB-DEBUG: Sample 2: 0.016667
+PTB-DEBUG: Sample 3: 0.016666
+PTB-DEBUG: Sample 4: 0.016667
+PTB-DEBUG: Sample 5: 0.016666
+PTB-DEBUG: Sample 6: 0.016668
+PTB-DEBUG: Sample 7: 0.016665
+PTB-DEBUG: Sample 8: 0.016667
+PTB-DEBUG: Sample 9: 0.016667
+PTB-DEBUG: Sample 10: 0.016672
+PTB-DEBUG: Sample 11: 0.016661
+PTB-DEBUG: Sample 12: 0.016661
+PTB-DEBUG: Sample 13: 0.016678
+PTB-DEBUG: Sample 14: 0.016668
+PTB-DEBUG: Sample 15: 0.016665
+PTB-DEBUG: Sample 16: 0.016661
+PTB-DEBUG: Sample 17: 0.016673
+PTB-DEBUG: Sample 18: 0.016666
+PTB-DEBUG: Sample 19: 0.016662
+PTB-DEBUG: Sample 20: 0.016672
+PTB-DEBUG: Sample 21: 0.016660
+PTB-DEBUG: Sample 22: 0.016674
+PTB-DEBUG: Sample 23: 0.016666
+PTB-DEBUG: Sample 24: 0.016660
+PTB-DEBUG: Sample 25: 0.016660
+PTB-DEBUG: Sample 26: 0.016679
+PTB-DEBUG: Sample 27: 0.016656
+PTB-DEBUG: Sample 28: 0.016672
+PTB-DEBUG: Sample 29: 0.016667
+PTB-DEBUG: Sample 30: 0.016667
+PTB-DEBUG: Sample 31: 0.016666
+PTB-DEBUG: Sample 32: 0.016673
+PTB-DEBUG: Sample 33: 0.016660
+PTB-DEBUG: Sample 34: 0.016673
+PTB-DEBUG: Sample 35: 0.016660
+PTB-DEBUG: Sample 36: 0.016674
+PTB-DEBUG: Sample 37: 0.016664
+PTB-DEBUG: Sample 38: 0.016663
+PTB-DEBUG: Sample 39: 0.016666
+PTB-DEBUG: Sample 40: 0.016667
+PTB-DEBUG: Sample 41: 0.016673
+PTB-DEBUG: Sample 42: 0.016660
+PTB-DEBUG: Sample 43: 0.016666
+PTB-DEBUG: Sample 44: 0.016674
+PTB-DEBUG: Sample 45: 0.016666
+PTB-DEBUG: Sample 46: 0.016667
+PTB-DEBUG: Sample 47: 0.016666
+PTB-DEBUG: Sample 48: 0.016660
+PTB-DEBUG: Sample 49: 0.016674
+PTB-DEBUG: Sample 50: 0.016666
+PTB-DEBUG: End of calibration data for this run...
+
+
+
+PTB-INFO: OpenGL-Renderer is Intel Open Source Technology Center :: Mesa DRI Intel(R) HD Graphics 530 (SKL GT2) :: 3.0 Mesa 20.0.8
+PTB-INFO: VBL startline = 1080 , VBL Endline = -1
+PTB-INFO: Will try to use OS-Builtin OpenML sync control support for accurate Flip timestamping.
+PTB-INFO: Measured monitor refresh interval from VBLsync = 16.666684 ms [59.999937 Hz]. (50 valid samples taken, stddev=0.005241 ms.)
+PTB-INFO: Reported monitor refresh interval from operating system = 16.666667 ms [60.000000 Hz].
+PTB-INFO: Small deviations between reported values are normal and no reason to worry.
+PTB-INFO: Support for fast OffscreenWindows enabled.
+PTB-INFO: Changed gst-launch style videosource bin string for use with deviceIndex -9 to 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert'.
+PTB-INFO: Trying to attach generic user provided bin as video source. The gst-launch style pipeline description is:
+PTB-INFO: v4l2src device=/dev/video0 ! jpegdec ! videoconvert
+PTB-INFO: Element 'VideoCodec=' created from spec 'x264enc key-int-max=30 speed-preset=1 '.
+PTB-INFO: Videocodec : x264enc key-int-max=30 speed-preset=1 
+PTB-INFO: Video profile: video/x-h264
+PTB-INFO: Multiplexer: qtmux faststart=1 movie-timescale=1000
+PTB-INFO: Container profile: video/x-msvideo
+PTB-DEBUG: In pipeline: Saving presets for encoder plugin: ptbvideomuxer0
+PTB-DEBUG: In pipeline: Saving presets for encoder plugin: x264enc2
+PTB-INFO: Video recording into file [] enabled for device -9. Codec is [video/x-h264].
+PTB-INFO: OpenVideoCapture: Disabling use of colorcaps as filter-caps. Lower performance, but higher compatibility.
+PTB-INFO: Video framerate conversion applies to recorded video and live video.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: No frame info available after preroll.
+PTB-DEBUG: No frame info for video source available after preroll.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-INFO: Camera 0 opened [Source resolution width x height = 640 x 480, video image size 640 x 480]
+PTB-INFO: Changed name of movie file for recording on device 0 to 'customTest_1.mov'.
+PTB-DEBUG: StartVideoCapture: Draining any queued stale video buffers before start of capture.
+PTB-DEBUG: StartVideoCapture: Drain of 0 buffers completed.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-INFO: Statechange completed with GST_STATE_CHANGE_NO_PREROLL.
+PTB-DEBUG: Starting capture...
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: Starting recording...
+PTB-DEBUG: Recording 1 started...
+PTB-DEBUG: Recording 2 started...
+PTB-DEBUG: Recording started...
+PTB-DEBUG: Waiting for real start: fA = 0 pA = 0 fps=0.000000
+PTB-DEBUG: Capture engine fully running...
+PTB-INFO: Capture started on device 0 - Input video resolution 640 x 480 - Framerate: 30.000000 fps.
+
+ans =
+
+    30
+
+PTB-DEBUG: DrawText: Trying to load external text renderer plugin from following file: [ /usr/share/matlab/site/m/psychtoolbox-3/PsychBasic/PsychPlugins/libptbdrawtext_ftgl.so.1 ]
+
+telapsed =
+
+    6.2661
+
+PTB-DEBUG: StopVideoCapture: Stopping video recording...
+PTB-DEBUG: StopVideoCapture: Stopping pipeline [playing -> paused]
+PTB-INFO: Statechange completed with GST_STATE_CHANGE_NO_PREROLL.
+PTB-DEBUG: StopVideoCapture: Videorecording stopped.
+PTB-DEBUG: StopVideoCapture: Fully stopping and shutting down capture pipeline.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+PTB-DEBUG: StopVideoCapture: Stopped.
+PTB-DEBUG: StopVideoCapture: Drain of 0 buffers completed. GStreamer idle, cleaning up...
+PTB-INFO: Video live capture dropped at least 12 frames on device 0 to keep capture running in sync with realtime.
+PTB-INFO: Framerate stabilization received 188 frames, delivered 205 frames, had to drop 0 frames and duplicate 18 frames
+PTB-INFO: to compensate for framerate fluctuations or mismatch between expected vs. real framerate on device 0.
+PTB-INFO: Average time spent in video decompressor (waiting/polling for new frames) was 23.917131 milliseconds.
+PTB-INFO: Average time spent in GetCapturedImage (intensity calculation Video->OpenGL texture conversion) was 0.219128 milliseconds.
+PTB-DEBUG: Statechange completed with GST_STATE_CHANGE_SUCCESS.
+
+
+PTB-INFO: There are still 1 textures, offscreen windows or proxy windows open. Screen('CloseAll') will auto-close them.
+PTB-INFO: This may be fine for studies where you only use a few textures or windows, but a large number of open
+PTB-INFO: textures or offscreen windows can be an indication that you forgot to dispose no longer needed items
+PTB-INFO: via a proper call to Screen('Close', [windowOrTextureIndex]); , e.g., at the end of each trial. These
+PTB-INFO: stale objects linger around and can consume significant memory ressources, causing degraded performance,
+PTB-INFO: timing trouble (if the system has to resort to disk paging) and ultimately out of memory conditions or
+PTB-INFO: crashes. Please check your code. (Screen('Close') is a quick way to release all textures and offscreen windows)
+
+PTB-DEBUG: In ScreenCloseAllWindows(): Destroying window 1
+PTB-DEBUG: In ScreenCloseAllWindows(): Destroying window 0
+PTB-DEBUG: In PsychCleanupTextRenderer: Releasing text renderer plugin completely.
+PTB-DEBUG:PsychOSCloseWindow: Closing with a final swapbuffers count of 252.
+PTB-DEBUG: Releasing pointer barriers for window 10.
+
+avgfps =
+
+   30.3217
+
+Done. Bye!
+>> 
