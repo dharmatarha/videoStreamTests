@@ -201,7 +201,7 @@ try
         
         % Open 800x600 pixels window at top-left corner of 'screen'
         % with black background color:
-        win=Screen('OpenWindow', screen, 0, [0 0 800 600]);
+        win=Screen('OpenWindow', screen, 0, [0 0 1400 800]);
     else
         % Open fullscreen window on 'screen', with black background color:
         oldsynclevel = Screen('Preference', 'SkipSyncTests');
@@ -224,7 +224,7 @@ try
         grabber = Screen('OpenVideoCapture', win, [], [0 0 640 480], [], [], [], codec, withsound);
     else
         % No need for Windows-style workarounds:
-        myRes = [0 0 640 480];
+        myRes = [0 0 1280 720];
         myRecFlags = 16+1;  % separate thread (16) + keep it in memory (1)
         grabber = Screen('OpenVideoCapture', win, [], myRes, [], [], [], codec, myRecFlags+withsound, [], 8);
     end
@@ -318,7 +318,7 @@ try
     % Close engine and recorded movie file:
     Screen('CloseVideoCapture', grabber);
     
-    % Close display, release all remaining ressources:
+    % Close display, release all remaining resources:
     sca;
     
     avgfps = count / telapsed
