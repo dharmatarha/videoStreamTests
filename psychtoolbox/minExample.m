@@ -1,4 +1,8 @@
-% minimal example
+% Minimal example to reproduce the file saving problem with custom Gstreamer input
+
+% Displays and records video for 10 secs from camera at /dev/video0 
+% using a custom gsteramer pipe. Display is at top-left corner, 
+% all params are hardcoded.
 
 %% Basic params
 
