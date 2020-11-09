@@ -224,11 +224,11 @@ try
         grabber = Screen('OpenVideoCapture', win, [], [0 0 640 480], [], [], [], codec, withsound);
     else
 %         % Custom Gstreamer pipeline definition:
-%         capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert';
-%         Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
-        % No need for Windows-style workarounds:
-%         grabber = Screen('OpenVideoCapture', win, -9, [0 0 640 480], [], [], [], codec, withsound, [], 8);
-        grabber = Screen('OpenVideoCapture', win, [], [0 0 640 480], [], [], [], codec, withsound, [], 8);
+        capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert';
+        Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
+%         No need for Windows-style workarounds:
+        grabber = Screen('OpenVideoCapture', win, -9, [0 0 640 480], [], [], [], codec, withsound, [], 8);
+%         grabber = Screen('OpenVideoCapture', win, [], [0 0 640 480], [], [], [], codec, withsound, [], 8);
     end
 
     % Wait a bit between 'OpenVideoCapture' and start of capture below.

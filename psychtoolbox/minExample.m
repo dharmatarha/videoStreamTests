@@ -1,26 +1,33 @@
 % Minimal example to reproduce the file saving problem with custom Gstreamer input
 
-% Displays and records video for 10 secs from camera at /dev/video0 
+% Displays and records video for "vidLength" secs from camera at /dev/video0 
 % using a custom gsteramer pipe. Display is at top-left corner, 
 % all params are hardcoded.
+
 
 %% Basic params
 
 moviename = 'test.mov';
 
 PsychDefaultSetup(1);
-maxTime = 10;  % maximum length for video in secs
-RestrictKeysForKbCheck(KbName('ESCAPE'));
+vidLength = 5;  % maximum length for video in secs
 Screen('Preference', 'Verbosity', 6);
 screen=max(Screen('Screens'));
 
 % Custom Gstreamer pipeline definition:
 capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert';
-Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
+
+try
+    Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
+catch ME
+    sca; 
+    rethrow(ME);
+end
 
 % Default codec:
 codec = ':CodecType=DEFAULTencoder';
 codec = [moviename, codec];
+
 
 %% Open device + Start capture
 try
@@ -33,7 +40,6 @@ try
     % Open video capture device
     grabber = Screen('OpenVideoCapture', win, -9, [0 0 1280 720], [], [], [], codec, 0, [], 8);
     WaitSecs('YieldSecs', 2);
-    KbReleaseWait;
 
     % helper variables for the display loop
     oldtex = 0;
@@ -44,7 +50,7 @@ try
 
     startTime = GetSecs;
     % Run until keypress or until maximum allowed time is reached
-    while ~KbCheck && GetSecs < startTime+maxTime
+    while GetSecs < startTime+vidLength
         
         % Wait blocking for next image then return it as texture
         [tex, ~, ~] = Screen('GetCapturedImage', win, grabber, 1, oldtex);
@@ -73,11 +79,9 @@ try
     
 catch ME
     % In case of error, call 'CloseAll'
-    RestrictKeysForKbCheck([]);
     sca;
     rethrow(ME);
     
 end  % try
 
-RestrictKeysForKbCheck([]);
 Screen('Preference', 'SkipSyncTests', oldsynclevel);

@@ -39,3 +39,52 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 \
     ! matroskamux ! filesink location='raw_dual.mkv' sync=false
 
 Works just fine!
+
+
+Adding audio, only record first:
+
+gst-launch-1.0 -v v4l2src device=/dev/video0 \
+    ! image/jpeg,width=1280,height=720,framerate=30/1 \
+    ! jpegdec \
+    ! videoconvert \
+    ! queue ! x264enc tune=zerolatency \
+    ! mux. \
+    alsasrc \
+    ! audio/x-raw,width=16,depth=16,rate=44100,channel=1 \
+    ! audioconvert \
+    ! queue ! avenc_aac \
+    ! mux. \
+    matroskamux name=mux \
+    ! filesink location=test.mkv
+
+Works fine!
+
+
+Timestamps? Sync?
+
+gst-launch-1.0 -v v4l2src device=/dev/video0 do-timestamp=true \
+    ! image/jpeg,width=1280,height=720,framerate=30/1 \
+    ! jpegdec \
+    ! videoconvert \
+    ! queue ! x264enc tune=zerolatency \
+    ! mux. \
+    alsasrc \
+    ! audio/x-raw,width=16,depth=16,rate=44100,channel=1 \
+    ! audioconvert \
+    ! queue ! avenc_aac \
+    ! mux. \
+    matroskamux name=mux \
+    ! filesink location=test.mkv
+
+
+
+
+For custom Gstreamer pipe with Psychtoolbox, with tee, only video:
+gst-launch-1.0 -v v4l2src device=/dev/video0 \
+    ! image/jpeg,width=1280,height=720,framerate=30/1 \
+    ! jpegdec \
+    ! tee name=t \
+    t. ! queue ! videoconvert ! x264enc tune=zerolatency ! h264parse \
+    ! matroskamux ! filesink location='raw_dual.mkv' sync=false \
+    t. ! queue ! videoconvert
+
