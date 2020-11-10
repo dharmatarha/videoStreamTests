@@ -10,7 +10,7 @@
 moviename = 'test.mov';
 
 PsychDefaultSetup(1);
-vidLength = 10;  % maximum length for video in secs
+vidLength = 5;  % maximum length for video in secs
 Screen('Preference', 'Verbosity', 6);
 screen=max(Screen('Screens'));
 recordingFlags = 256;
