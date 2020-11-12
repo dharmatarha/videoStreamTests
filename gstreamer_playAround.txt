@@ -65,6 +65,25 @@ Timestamps? Sync?
 gst-launch-1.0 -v v4l2src device=/dev/video0 do-timestamp=true \
     ! image/jpeg,width=1280,height=720,framerate=30/1 \
     ! jpegdec \
+    ! video/x-raw \
+    ! tee name=tvideo \
+    tvideo. ! queue ! x264enc tune=zerolatency ! mux. \
+    tvideo. ! queue ! xvimagesink \
+    alsasrc \
+    ! audio/x-raw,width=16,depth=16,rate=44100,channel=1 \
+    ! tee name=taudio \
+    taudio. ! queue ! avenc_aac ! mux. \
+    taudio. ! queue ! pulsesink \
+    matroskamux name=mux ! filesink location=audioVisualTest.mkv
+
+# "sync=false" after ximagesink and pulsesink?
+# "videoconvert" before x264enc
+# "audioconvert" before avenc_aac
+
+
+gst-launch-1.0 -v v4l2src device=/dev/video0 do-timestamp=true \
+    ! image/jpeg,width=1280,height=720,framerate=30/1 \
+    ! jpegdec \
     ! videoconvert \
     ! queue ! x264enc tune=zerolatency \
     ! mux. \
@@ -75,6 +94,7 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 do-timestamp=true \
     ! mux. \
     matroskamux name=mux \
     ! filesink location=test.mkv
+
 
 
 
