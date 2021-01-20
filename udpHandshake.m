@@ -23,7 +23,7 @@ pkg load sockets;
 
 % Constants
 maxTimeOut = 60;  % maximum allowed time for the handshake in secs
-waitTime = 0.05;  % time between sending packets when repeatedly doing so, in both stages, in secs
+waitTime = 0.2;  % time between sending packets when repeatedly doing so, in both stages, in secs
 maxDiff = 1;  % maximum allowed difference for the two timestamps (local and remote) in the second stage
 startDelay = 3; % shared start time is the average of the two timestamps (local and remote) + startDelay, in secs
 localPort = 9999;
@@ -48,10 +48,13 @@ successFlag = 0;
 stageStart = GetSecs;
 while ~successFlag && (GetSecs-stageStart) < maxTimeOut
     % try reading from the socket
-    [incomingMessage, count] = recv(udpSocket, 512, 'MSG_DONTWAIT');  % non-blocking
+    [incomingMessage, count] = recv(udpSocket, 512, MSG_DONTWAIT);  % non-blocking
     % if there was incoming packet and it matches initMessage, 
     % send last messages and move on
-    if count ~= -1 && strcmp(incomingMessage, initMessage)
+    if count ~= -1
+        disp(incomingMessage);
+    endif
+    if count ~= -1 && strcmp(char(incomingMessage), initMessage)
         % send initMessage twice 
         for i = 1:2
             send(udpSocket, initMessage);
@@ -82,7 +85,7 @@ stageStart = GetSecs;
 timeMessage = num2str(stageStart, '%.5f');  % packet requires string or uint8
 while ~successFlag && (GetSecs-stageStart)<maxTimeOut
     % try reading from the socket
-    [incomingMessage, count] = recv(udpSocket, 512, 'MSG_DONTWAIT');  % non-blocking
+    [incomingMessage, count] = recv(udpSocket, 512, MSG_DONTWAIT);  % non-blocking
     % if there was incoming packet and it is a timestamp close to timeMessage,
     % send last messages and move on
     if count ~= -1 && abs(str2double(incomingMessage)-stageStart) < maxDiff
