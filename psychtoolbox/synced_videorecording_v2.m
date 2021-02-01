@@ -5,7 +5,7 @@
 
 % Import
 pkg load sockets;
-remoteIP = '10.160.12.108';
+remoteIP = '10.160.21.115';
 
 moviename = 'mytest1.mov';
 withsound = 0; % record with sound
@@ -21,6 +21,17 @@ channels = 2;
 %channels = [2,1]; %separate channel for recording? --> 'audiodata' matrix should match in size!!
 %selectchannels = [0, 6; 12, 14];
 freq = 48000;
+% get correct audio device
+device = [];  % system default is our default as well
+% we only change audio device in the lab, when we see the correct audio
+% card
+tmpDevices = PsychPortAudio('GetDevices');
+for i = 1:numel(tmpDevices)
+    if strcmp(tmpDevices(i).DeviceName, 'ESI Juli@: ICE1724 (hw:3,0)')
+        device = tmpDevices(i).DeviceIndex;
+    end
+end
+
 
 
 function sharedStartTime = handshake(remoteIP)
@@ -191,7 +202,8 @@ try
     
     % open & start audio feedback     
     %pa = PsychPortAudio('Open', [], 4+2+1, [], [], 2);   
-    painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
+##    painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
+    painput = PsychPortAudio('Open', device, 2+1, 1);
     paoutput = painput;
     
     % Preallocate an internal audio recording  buffer with a capacity of at least
