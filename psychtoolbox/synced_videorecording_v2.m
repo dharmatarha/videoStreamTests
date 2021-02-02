@@ -3,7 +3,7 @@
 
 % Import
 pkg load sockets;
-remoteIP = '10.160.12.108';
+remoteIP = '10.160.21.115';
 
 % Basic params - video recording
 moviename = 'mytest1.mov';
@@ -16,6 +16,7 @@ screen=max(Screen('Screens'));
 % Perform basic initialization of the sound driver:
 InitializePsychSound;
 wavfilename = 'myaudio.wav';
+freq = 44100;
 
 % get correct audio device
 device = [];  % system default is our default as well
@@ -182,9 +183,8 @@ try
     % open & start audio feedback     
     %pa = PsychPortAudio('Open', [], 4+2+1, [], [], 2);   
     %painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
-    painput = PsychPortAudio('Open', [], 2+1, 1);
+    painput = PsychPortAudio('Open', device, 2+1, 1);
     paoutput = painput;
-    
     
     % Preallocate an internal audio recording  buffer with a capacity of at least
     % 10 seconds, possibly more if requested latency is higher:
