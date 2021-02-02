@@ -1,14 +1,12 @@
 %% UDP handshake + video-audio capture merged 
 
 
-%% Basic params - video recording
-
 % Import
 pkg load sockets;
-remoteIP = '10.160.21.115';
+remoteIP = '10.160.12.108';
 
+% Basic params - video recording
 moviename = 'mytest1.mov';
-withsound = 0; % record with sound
 windowed = 1;
 PsychDefaultSetup(1);
 vidLength = 900;  % maximum length for video in secs
@@ -17,21 +15,7 @@ screen=max(Screen('Screens'));
 
 % Perform basic initialization of the sound driver:
 InitializePsychSound;
-channels = 2;
-%channels = [2,1]; %separate channel for recording? --> 'audiodata' matrix should match in size!!
-%selectchannels = [0, 6; 12, 14];
-freq = 48000;
-% get correct audio device
-device = [];  % system default is our default as well
-% we only change audio device in the lab, when we see the correct audio
-% card
-tmpDevices = PsychPortAudio('GetDevices');
-for i = 1:numel(tmpDevices)
-    if strcmp(tmpDevices(i).DeviceName, 'ESI Juli@: ICE1724 (hw:3,0)')
-        device = tmpDevices(i).DeviceIndex;
-    end
-end
-
+wavfilename = 'myaudio.wav';
 
 
 function sharedStartTime = handshake(remoteIP)
@@ -202,9 +186,10 @@ try
     
     % open & start audio feedback     
     %pa = PsychPortAudio('Open', [], 4+2+1, [], [], 2);   
-##    painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
-    painput = PsychPortAudio('Open', device, 2+1, 1);
+    %painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
+    painput = PsychPortAudio('Open', [], 2+1, 1);
     paoutput = painput;
+    
     
     % Preallocate an internal audio recording  buffer with a capacity of at least
     % 10 seconds, possibly more if requested lat'ency is higher:
@@ -219,6 +204,7 @@ try
     PsychPortAudio('FillBuffer', paoutput, zeros(2, outbuffersize));
     
     playbackstart = PsychPortAudio('Start', paoutput, 0, sharedStartTime, 1); % sharedStartTime ?? 
+   
     
     % Wait until at least captureQuantum seconds of sound are available from the capture
     % device and then quickly fetch it from the capture device. captureQuantum
@@ -326,10 +312,10 @@ try
     oldcaptureQuantum = -1;
     cumoverrun   = 0;
     cumunderflow = 0;
-
-        
-    
+           
     temp = GetSecs;
+    
+    recordedaudio = [];
     
     % Run until keypress or until maximum allowed time is reached
         while ~KbCheck && GetSecs < vidstartAt+vidLength
@@ -360,12 +346,7 @@ try
                     WaitSecs('YieldSecs', 0.005);
                     
                 end  % if tex
-             
-            % audio playback status
-                if temp + 5
-                    s=PsychPortAudio('GetStatus', paoutput);
-                    %disp(s);
-                end
+              
                 
             captureQuantum = updateQuantum;
 
@@ -381,7 +362,7 @@ try
               [audiodata, offset, overrun] = PsychPortAudio('GetAudioData', painput, [], captureQuantum);
               fetchDelay = GetSecs - fetchDelay;
               underflow = 0;
-              
+                           
               % ... and stream it into our output buffer:
               while size(audiodata, 2) > 0
                 % Make sure to never push more data in the buffer than it can
@@ -399,6 +380,9 @@ try
                 underflow = underflow + curunderflow;
               end
               
+              % get all audiodata
+              recordedaudio = [recordedaudio pushdata];
+              
               % Check for xrun conditions from low-level sound hardware:
               s1 = PsychPortAudio('GetStatus', paoutput);
               s2 = PsychPortAudio('GetStatus', painput);
@@ -407,23 +391,20 @@ try
               cumoverrun = cumoverrun + overrun;
               cumunderflow = cumunderflow + underflow;
 
-              
               % Done. Next iteration...
-              
-              
+                            
         end  % while
-      
-   
+        
   
-    % User wants us to finish. Disable input monitoring:
-    %PsychPortAudio('DirectInputMonitoring', paoutput, 0);
     PsychPortAudio('Stop', paoutput);
     PsychPortAudio('Stop', painput);
     % Drain its capture buffer...
     PsychPortAudio('GetAudioData', painput);
     % Done - Close device and driver:
-    PsychPortAudio('Close');
-      
+    PsychPortAudio('Close'); 
+    
+    % store recorded audio in wavfile
+    psychwavwrite(transpose(recordedaudio), freq, 16, wavfilename);
     
     % Done, report elapsed time
     telapsed = GetSecs - vidcaptureStartTime;
@@ -455,10 +436,6 @@ disp([char(10), 'Elapsed time: ', num2str(telapsed), ' secs']);
 RestrictKeysForKbCheck([]);
 
 Screen('Preference', 'SkipSyncTests', oldsynclevel);
-
-% get timestamps for everything: flip --> save to vector, stopvidecapture, etc.
-% merge with handshake procedure
-
 
 
 
