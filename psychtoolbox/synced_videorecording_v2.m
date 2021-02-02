@@ -17,6 +17,17 @@ screen=max(Screen('Screens'));
 InitializePsychSound;
 wavfilename = 'myaudio.wav';
 
+% get correct audio device
+device = [];  % system default is our default as well
+% we only change audio device in the lab, when we see the correct audio
+% card
+tmpDevices = PsychPortAudio('GetDevices');
+for i = 1:numel(tmpDevices)
+    if strncmp(tmpDevices(i).DeviceName, 'ESI Juli@: ICE1724', 18) && strcmp(tmpDevices(i).DeviceName(end-2:end), ',0)')
+        device = tmpDevices(i).DeviceIndex;
+    end
+end
+
 
 function sharedStartTime = handshake(remoteIP)
     %% handshake 
