@@ -165,6 +165,27 @@ try
     Stimulus_OnsetTime = nan(vidLength*30, 1);
     Flip_Timestamp = nan(vidLength*30, 1);
     
+    % Vide device params
+    waitForImage = 1;
+    
+    % open & start audio feedback     
+    %pa = PsychPortAudio('Open', [], 4+2+1, [], [], 2);   
+    %painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
+    painput = PsychPortAudio('Open', [], 2+1, 1);
+    paoutput = painput;
+    
+    
+    % Preallocate an internal audio recording  buffer with a capacity of at least
+    % 10 seconds, possibly more if requested latency is higher:
+    lat = 150/1000;
+    PsychPortAudio('GetAudioData', painput, max(2 * lat, 10));
+      
+    % Allocate a zero-filled (ie. silence) output audio buffer of more than
+    % sufficient size: Three times the requested latency, but at least 30 seconds.
+    % One could do this more clever, but this is a safe no-brainer and memory
+    % is cheap:
+    outbuffersize = floor(freq * 3 * max(lat, 10));
+    PsychPortAudio('FillBuffer', paoutput, zeros(2, outbuffersize));    
     
     % Open video capture device
     grabber = Screen('OpenVideoCapture', win, -9, [0 0 1280 720], [], [], [], codec, withsound, [], 8);
@@ -180,31 +201,11 @@ try
    
     vidstartAt = sharedStartTime; % video capture delay based on handshake sync 
     
-    
     % Start capture with 30 fps
     [Fps, vidcaptureStartTime] = Screen('StartVideoCapture', grabber, 30, 1, vidstartAt);
     
-    % open & start audio feedback     
-    %pa = PsychPortAudio('Open', [], 4+2+1, [], [], 2);   
-    %painput = PsychPortAudio('Open', [], 2+1, 1, [], channels, [], [], selectchannels); % under 'channels' optionally we can define a 2 element vector specifying different channels for input / output
-    painput = PsychPortAudio('Open', [], 2+1, 1);
-    paoutput = painput;
-    
-    
-    % Preallocate an internal audio recording  buffer with a capacity of at least
-    % 10 seconds, possibly more if requested lat'ency is higher:
-    lat = 150/1000;
-    PsychPortAudio('GetAudioData', painput, max(2 * lat, 10));
-      
-    % Allocate a zero-filled (ie. silence) output audio buffer of more than
-    % sufficient size: Three times the requested latency, but at least 30 seconds.
-    % One could do this more clever, but this is a safe no-brainer and memory
-    % is cheap:
-    outbuffersize = floor(freq * 3 * max(lat, 10));
-    PsychPortAudio('FillBuffer', paoutput, zeros(2, outbuffersize));
-    
-    playbackstart = PsychPortAudio('Start', paoutput, 0, sharedStartTime, 1); % sharedStartTime ?? 
-   
+    % start audio right away
+    playbackstart = PsychPortAudio('Start', paoutput, 0, [], 1);
     
     % Wait until at least captureQuantum seconds of sound are available from the capture
     % device and then quickly fetch it from the capture device. captureQuantum
@@ -312,7 +313,7 @@ try
     oldcaptureQuantum = -1;
     cumoverrun   = 0;
     cumunderflow = 0;
-           
+    
     temp = GetSecs;
     
     recordedaudio = [];
@@ -321,7 +322,7 @@ try
         while ~KbCheck && GetSecs < vidstartAt+vidLength
              
             % Wait blocking for next image then return it as texture
-            [tex, pts, nrdropped] = Screen('GetCapturedImage', win, grabber, 1, oldtex);
+            [tex, pts, nrdropped] = Screen('GetCapturedImage', win, grabber, waitForImage, oldtex);
     
                % If a texture is available, draw and show it.
                 if tex > 0
@@ -341,9 +342,6 @@ try
                     VBL_Timestamp(count, 1) = VBLTimestamp;
                     Stimulus_OnsetTime(count, 1) = StimulusOnsetTime;
                     Flip_Timestamp(count, 1) = FlipTimestamp;
-                    
-                else  % if tex
-                    WaitSecs('YieldSecs', 0.005);
                     
                 end  % if tex
               
