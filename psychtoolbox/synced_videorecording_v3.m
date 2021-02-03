@@ -146,7 +146,7 @@ vidLength = 900;  % maximum length for video in secs
 wavfilename = 'myaudio.wav';
 freq = 44100;
 audioDevMode = 2+1;  % 1 = playback only; 2 = recording only; 3 = playback + recording
-audioReqLatencyClass = 1;  % 0 = play nicely, no pushing for low-latency; 1 = aim for low-latency; 2 = agressively aim for low-latency (full control)
+audioReqLatencyClass = 2;  % 0 = play nicely, no pushing for low-latency; 1 = aim for low-latency; 2 = agressively aim for low-latency (full control)
 audioLatency = 0.025;  % intended latency for audio recording - playback loop, in secs
 capturebinspec = 'v4l2src device=/dev/video0 ! image/jpeg,width=1280,height=720,framerate=30/1 ! jpegdec ! videoconvert';  % custom Gstreamer pipeline definition
 codec = ':CodecType=DEFAULTencoder';  % default codec
@@ -171,6 +171,7 @@ recAudioCounter = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Psychtoolbox initializations
 
+Priority(1);
 PsychDefaultSetup(1);
 InitializePsychSound;
 Screen('Preference', 'Verbosity', 3);
@@ -446,6 +447,7 @@ try
     
 catch ME
     % In case of error, close screens, psychportaudio
+    Priority(0);
     RestrictKeysForKbCheck([]);
     sca;
     PsychPortAudio('Close');
@@ -459,6 +461,6 @@ disp([char(10), 'diff: ', num2str(vidcaptureStartTime - sharedStartTime)]);
 disp([char(10), 'Elapsed time: ', num2str(telapsed), ' secs']); 
 
 Screen('Preference', 'SkipSyncTests', oldsynclevel);
-
+Priority(0);
 
 
