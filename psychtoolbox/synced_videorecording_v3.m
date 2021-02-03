@@ -40,8 +40,7 @@ function sharedStartTime = handshake(remoteIP)
       % Open socket, connect it to remote address
       udpSocket = socket(AF_INET, SOCK_DGRAM);
       bind(udpSocket, localPort);
-      connect(udpSocket, remoteAddr);
-      
+      connect(udpSocket, remoteAddr);     
       
       %% First stage
       
@@ -148,7 +147,7 @@ wavfilename = 'myaudio.wav';
 freq = 44100;
 audioDevMode = 2+1;  % 1 = playback only; 2 = recording only; 3 = playback + recording
 audioReqLatencyClass = 1;  % 0 = play nicely, no pushing for low-latency; 1 = aim for low-latency; 2 = agressively aim for low-latency (full control)
-audioLatency = 0.1;  % intended latency for audio recording - playback loop, in secs
+audioLatency = 0.025;  % intended latency for audio recording - playback loop, in secs
 capturebinspec = 'v4l2src device=/dev/video0 ! image/jpeg,width=1280,height=720,framerate=30/1 ! jpegdec ! videoconvert';  % custom Gstreamer pipeline definition
 codec = ':CodecType=DEFAULTencoder';  % default codec
 codec = [moviename, codec];
@@ -165,7 +164,7 @@ flipTimeStamps = nan((vidLength+60)*vidSamplingRate, 3);  % three columns for th
 droppedFrames = frameCaptTime;
 
 % preallocate audio data var, for two channels
-recordedaudio = [(vidLength+60)*freq; (vidLength+60)*freq];
+recordedaudio = zeros(2, (vidLength+60)*freq);
 recAudioCounter = 0;
 
 
@@ -206,7 +205,7 @@ end
 
 try
     % Open onscreen window for video playback
-    win = Screen('OpenWindow', screen, backgroundColor]);
+    win = Screen('OpenWindow', screen, backgroundColor);
     Screen('TextSize', win, windowTextSize);  % set text size for win
     Screen('Flip', win);  % initial flip to background
     
@@ -346,18 +345,18 @@ try
     
 %    temp = GetSecs;
     
-    recordedaudio = [];
+##    recordedaudio = [];
     
     % helper variables for the display loop
     oldtex = 0;
     vidFrameCount = 1;
     
     % Run until keypress or until maximum allowed time is reached
-    while ~KbCheck && GetSecs < vidstartAt+vidLength
+    while ~KbCheck && GetSecs < sharedStartTime+vidLength
          
         % Check for next available image, return it as texture if there was one
-        [tex, frameCaptTime(vidFrameCount, 1), droppedFrames(vidFrameCount, 1)] = Screen('GetCapturedImage', win, grabber, waitForImage, oldtex);
-
+        [tex, frameCaptTime(vidFrameCount), droppedFrames(vidFrameCount)] = Screen('GetCapturedImage', win, grabber, waitForImage, oldtex);  
+        
         % If a texture is available, draw and show it.
         if tex > 0
             % Check for completion of previous asynchronous flip.
@@ -368,7 +367,7 @@ try
             endif
             
             % Print capture timestamp in seconds since start of capture:
-            Screen('DrawText', win, sprintf('Capture time (secs): %.4f', pts), 0, 0, 255);
+            Screen('DrawText', win, sprintf('Capture time (secs): %.4f', frameCaptTime(vidFrameCount)), 0, 0, 255);
             % Draw new texture from framegrabber.
             Screen('DrawTexture', win, tex);
             oldtex = tex;
@@ -400,8 +399,8 @@ try
         underflow = underflow + curunderflow;
         
         % get all audiodata
-        recordedaudio(:, recAudioCounter+1:size(audiodata,2) = audiodata;
-        recAudioCounter = size(audiodata, 2);
+        recordedaudio(:, recAudioCounter+1:recAudioCounter+size(audiodata,2)) = audiodata;
+        recAudioCounter = recAudioCounter + size(audiodata, 2);
 %        recordedaudio = [recordedaudio audiodata];
         
         % Check for xrun conditions from low-level sound hardware:
@@ -425,6 +424,9 @@ try
     PsychPortAudio('Close'); 
     
     % store recorded audio in wavfile
+    if recAudioCounter < size(recordedaudio, 2)
+        recordedaudio(:, recAudioCounter+1:end) = [];
+    endif
     psychwavwrite(transpose(recordedaudio), freq, 16, wavfilename);
     
     % Done, report elapsed time
@@ -439,7 +441,7 @@ try
     sca;
     
     % Report fps
-    avgfps = count / telapsed;
+    avgfps = vidFrameCount / telapsed;
     disp([char(10), 'Average framerate: ', num2str(avgfps)]);
     
 catch ME
@@ -453,7 +455,7 @@ end  % try
 
 % report start time of capture, elapsed time 
 disp([char(10), 'Start of capture: ', num2str(vidcaptureStartTime)]);
-disp([char(10), 'diff: ', num2str(vidcaptureStartTime - vidstartAt)]);
+disp([char(10), 'diff: ', num2str(vidcaptureStartTime - sharedStartTime)]);
 disp([char(10), 'Elapsed time: ', num2str(telapsed), ' secs']); 
 
 Screen('Preference', 'SkipSyncTests', oldsynclevel);
