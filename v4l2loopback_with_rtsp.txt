@@ -1,0 +1,49 @@
+Guide for using an IP cam providing an RTSP stream with v4l2loopback, as a regular v4l2 device (as e.g. a standard webcam)
+
+
+
+Tested system / requirements:
+Ubuntu 20.04
+Gstreamer 1.0 (make sure you have all gstreamer packages for your use case, there are many)
+Otherwise working IP cam setup
+
+
+
+Step 1 - Install v4l2loopback kernel module
+
+With this module we can emulate a v4l2 capable video device, exposed as /dev/videoX.
+Project homepage: https://github.com/umlaeute/v4l2loopback
+Install version 0.12.5, not the one in the standard repos (0.12.3, as of now):
+	- Download the relevant .deb from e.g. here: http://ftp.br.debian.org/debian/pool/main/v/v4l2loopback/v4l2loopback-dkms_0.12.5-1_all.deb
+	- Install it with $ sudo dpkg -i PATH
+	- If there are missing dependencies, install first the version offered in the canonical repo with apt, remove it, and then install the 0.12.5 version with dpkg
+	
+Module can be loaded with $ sudo modprobe v4l2loopback
+If loaded, you should be able to see that in the output of $ dmesg | grep v4l2loopback, or in the output of $ lsmod
+The created device should show up in the output of $ v4l2-ctl --list-devices, as a "Dummy"
+
+See a bunch of useful examples of how the loopback works here:
+https://github.com/umlaeute/v4l2loopback/wiki
+Simple example to verify that the loopback device works:
+# Directing a test video source into loopback
+$ gst-launch-1.0 videotestsrc ! v4l2sink device=/dev/videoX 
+# Watching video from loopback device
+$ gst-launch-1.0 v4l2src device=/dev/videoX ! autovideosink
+
+
+
+Step 2 - Direct the rtsp stream to the loopback device
+
+Exact gst-launch-1.0 command depends on your cam, in our case it was this:
+$ gst-launch-1.0 rtspsrc location=rtsp://admin:Password@192.168.1.23:554/ latency=10 ! rtph265depay ! h265parse ! avdec_h265 ! videoconvert ! v4l2sink device=/dev/videoX sync=false
+
+The above command is for an IP cam on local network at 192.168.1.23, streaming on default RTSP port (554) with H265 encoding.
+Conversion and latency options are for our use case (decoding and forwarding as fast as possible). 
+
+At this point, v4l2-ctl should be able to list the capabilities of the device (format, resolution, framerate, etc.)
+
+
+
+Step 3 - Use as regular v4l2 device
+
+Open the device with your program / script of choosing :)
