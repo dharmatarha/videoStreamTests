@@ -24,8 +24,8 @@ pkg load sockets;
 % Constants
 maxTimeOut = 60;  % maximum allowed time for the handshake in secs
 waitTime = 0.2;  % time between sending packets when repeatedly doing so, in both stages, in secs
-maxDiff = 1;  % maximum allowed difference for the two timestamps (local and remote) in the second stage
-startDelay = 3; % shared start time is the average of the two timestamps (local and remote) + startDelay, in secs
+maxDiff = 100;  % maximum allowed difference for the two timestamps (local and remote) in the second stage
+startDelay = 103; % shared start time is the average of the two timestamps (local and remote) + startDelay, in secs
 localPort = 9998;
 remoteIP = '10.160.12.108';
 remotePort = 9998;
@@ -89,6 +89,9 @@ while ~successFlag && (GetSecs-stageStart)<maxTimeOut
     [incomingMessage, count] = recv(udpSocket, 512, MSG_DONTWAIT);  % non-blocking
     % if there was incoming packet and it is a timestamp close to timeMessage,
     % send last messages and move on
+    if count ~= -1
+        disp(incomingMessage);
+    endif
     if count ~= -1 && abs(str2double(char(incomingMessage))-stageStart) < maxDiff
         % send timeMessage twice 
         for i = 1:2
@@ -108,8 +111,8 @@ endwhile
 
 % Check for timeout
 if ~successFlag
-    error('Handshake procedure timed out during second stage!');
     disconnect(udpSocket);
+    error('Handshake procedure timed out during second stage!');
 endif
 
 

@@ -15,7 +15,10 @@ Screen('Preference', 'Verbosity', 6);
 screen=max(Screen('Screens'));
 
 % Custom Gstreamer pipeline definition:
-capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert';
+%capturebinspec = 'v4l2src device=/dev/video0 ! jpegdec ! videoconvert'
+%capturebinspec = 'rtspsrc location=rtsp://admin:Password@192.168.1.21:554/ ! queue ! rtph265depay ! h265parse ! avdec_h265 ! videoconvert';
+%capturebinspec = 'rtspsrc location=rtsp://admin:Password@192.168.1.21:554/ ! rtph265depay ! h265parse ! avdec_h265 ! videoconvert';
+capturebinspec = 'v4l2src device=/dev/video2 ! videoconvert';
 
 try
     Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
@@ -33,12 +36,13 @@ codec = [moviename, codec];
 try
     % Init a window in top-left corner, skip tests
     oldsynclevel = Screen('Preference', 'SkipSyncTests', 1);
-    win = Screen('OpenWindow', screen, 0, [0 0 1280 720]);
+    win = Screen('OpenWindow', screen, 0, [0 0 1920 1080]);
     Screen('Flip',win);
     Screen('TextSize', win, 24);
     
     % Open video capture device
-    grabber = Screen('OpenVideoCapture', win, -9, [0 0 1280 720], [], [], [], codec, 0, [], 8);
+    grabber = Screen('OpenVideoCapture', win, -9, [0 0 1920 1080], [], [], [], codec, 0, [], 8);
+    disp('HEYHEY      Video Device Opened!');
     WaitSecs('YieldSecs', 2);
 
     % helper variables for the display loop
@@ -46,7 +50,8 @@ try
     count = 0;
     
     % Start capture with target fps
-    Screen('StartVideoCapture', grabber, 30, 1);
+    Screen('StartVideoCapture', grabber, 25, 1);
+    disp('HEYHEY      Video Capture Started!');
 
     startTime = GetSecs;
     % Run until keypress or until maximum allowed time is reached
@@ -54,6 +59,7 @@ try
         
         % Wait blocking for next image then return it as texture
         [tex, ~, ~] = Screen('GetCapturedImage', win, grabber, 1, oldtex);
+        disp('HEYHEY      FIRST IMAGE CAPTURED!');
 
         if tex > 0
             Screen('DrawTexture', win, tex);  % Draw new texture from device
@@ -68,14 +74,14 @@ try
 
     % Done, report elapsed time
     telapsed = GetSecs - startTime;
-    disp([newline, 'Elapsed time: ', num2str(round(telapsed, 2)), ' secs']);  
+    disp([char(10), 'Elapsed time: ', num2str(round(telapsed, 2)), ' secs']);  
     % Shutdown
     Screen('StopVideoCapture', grabber);  % Stop capture engine and recording  
     Screen('CloseVideoCapture', grabber);  % Close engine and recorded movie file
     sca;
     % Report fps
     avgfps = count / telapsed;
-    disp([newline, 'Average framerate: ', num2str(avgfps)]);
+    disp([char(10), 'Average framerate: ', num2str(avgfps)]);
     
 catch ME
     % In case of error, call 'CloseAll'

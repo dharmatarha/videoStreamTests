@@ -1,3 +1,5 @@
+function synced_record(pairNo, labName)
+
 %% UDP handshake + video-audio capture and playback.
 %
 % Initial script for minimal-latency audiovisual channel between two labs
@@ -20,7 +22,7 @@ pkg load sockets;
 % Helper function for "handshake", that is, for negotiating a shared start
 % time across local and remote PCs
 function sharedStartTime = handshake(remoteIP)
-    %% handshake 
+      %% handshake 
 
       % Constants
       maxTimeOut = 60;  % maximum allowed time for the handshake in secs
@@ -40,7 +42,7 @@ function sharedStartTime = handshake(remoteIP)
       % Open socket, connect it to remote address
       udpSocket = socket(AF_INET, SOCK_DGRAM);
       bind(udpSocket, localPort);
-      connect(udpSocket, remoteAddr);     
+      connect(udpSocket, remoteAddr);
       
       %% First stage
       
@@ -134,21 +136,36 @@ endfunction
 %%%%%%%%%%%%%%%%%%%%%%%%%    MAIN    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% check inputs
+if nargin ~= 2
+    error("Need two input args, pairNo and labName!");
+end
+if ~isnumeric(pairNo) || ~ismember(pairNo, 1:99)
+    error("Input arg pairNo should be between 1-99!");
+end
+if ~ischar(labName) || ~ismember(labName, {"Mordor", "Gondor"})
+    error("Input arg labName should be one of Mordor/Gondor as char array!");
+end
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic settings, params, preallocation
 
 % Network address of remote PC for handshake
-remoteIP = '10.160.21.115';
+remoteIP = "10.160.21.115";
+
+% save file name
+savefile = ["pair", num2str(pairNo), labName, "_times.mat"];
 
 % Params for audio + video recording
-moviename = 'mytest1.mov';
-vidLength = 900;  % maximum length for video in secs
-wavfilename = 'myaudio.wav';
+moviename = ["pair", num2str(pairNo), labName, ".mov"];
+vidLength = 1800;  % maximum length for video in secs
+wavfilename = ["pair", num2str(pairNo), labName, ".wav"];
 freq = 44100;
 audioDevMode = 2+1;  % 1 = playback only; 2 = recording only; 3 = playback + recording
 audioReqLatencyClass = 2;  % 0 = play nicely, no pushing for low-latency; 1 = aim for low-latency; 2 = agressively aim for low-latency (full control)
 audioLatency = 0.025;  % intended latency for audio recording - playback loop, in secs
-capturebinspec = 'v4l2src device=/dev/video0 ! image/jpeg,width=1280,height=720,framerate=30/1 ! jpegdec ! videoconvert';  % custom Gstreamer pipeline definition
+capturebinspec = 'v4l2src device=/dev/video0 ! image/jpeg,width=1920,height=1080,framerate=30/1 ! jpegdec ! videoconvert';  % custom Gstreamer pipeline definition
 codec = ':CodecType=DEFAULTencoder';  % default codec
 codec = [moviename, codec];
 waitForImage = 0;  % setting for Screen('GetCapturedImage'), 0 = polling (non-blocking); 1 = blocking wait for next image
@@ -440,17 +457,30 @@ try
     vidCloseTime = GetSecs; 
     RestrictKeysForKbCheck([]);
     sca;
-    
+
+    % Save major timestamps
+    save(savefile, "sharedStartTime", "videoCaptureStartTime", "playbackstart",...
+    "frameCaptTime", "vidFrameCount", "flipTimestamps", "vidStopTime",...
+    "vidCloseTime", "telapsed");
+
     % Report fps
     avgfps = vidFrameCount / telapsed;
     disp([char(10), 'Average framerate: ', num2str(avgfps)]);
-    
+
 catch ME
     % In case of error, close screens, psychportaudio
     Priority(0);
     RestrictKeysForKbCheck([]);
     sca;
     PsychPortAudio('Close');
+    % Stop capture engine and recording - this might error out itself if the
+    % original error is related to the video capture
+    Screen('StopVideoCapture', grabber);  % Stop capture engine and recording
+    Screen('CloseVideoCapture', grabber);
+    % Save major timestamps if we can
+    save(savefile, "sharedStartTime", "videoCaptureStartTime", "playbackstart",...
+    "frameCaptTime", "vidFrameCount", "flipTimestamps", "vidStopTime",...
+    "vidCloseTime", "telapsed");
     rethrow(ME);
     
 end  % try
@@ -463,4 +493,4 @@ disp([char(10), 'Elapsed time: ', num2str(telapsed), ' secs']);
 Screen('Preference', 'SkipSyncTests', oldsynclevel);
 Priority(0);
 
-
+return
