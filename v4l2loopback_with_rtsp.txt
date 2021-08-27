@@ -41,9 +41,11 @@ The above command is for an IP cam on local network at 192.168.1.23, streaming o
 Conversion and latency options are for our use case (decoding and forwarding as fast as possible). 
 
 At this point, v4l2-ctl should be able to list the capabilities of the device (format, resolution, framerate, etc.)
-
+Check if it is working with e.g.:
+$ gst-launch-1.0 v4l2src device=/dev/videoX ! autovideosink
 
 
 Step 3 - Use as regular v4l2 device
 
 Open the device with your program / script of choosing :)
+In our use case, with Psychtoolbox under Octave, capturebin is specified with an additional ! videoconverter element
