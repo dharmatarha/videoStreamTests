@@ -60,7 +60,7 @@ audioStim = [audioStim'; audioStim'];  % two rows from same vector for stereo
 triggerL = 2000;  % trigger length in microseconds
 triggerVal = 10;  % trigger value
 % init parallel port control
-%ppdev_mex('Open', 1);
+ppdev_mex('Open', 1);
 
 
 %% PsychPortAudio setup
@@ -124,7 +124,7 @@ for eventIdx = 1:eventNo
 
         % blocking playback start for precision
         onsets(eventIdx) = PsychPortAudio('Start', pahandle, 1, startTime, 1);
-%        lptwrite(1, triggerVal, triggerL);
+        lptwrite(1, triggerVal, triggerL);
 
         % adjust stimulus start time
         startTime = onsets(eventIdx) + period;
@@ -134,7 +134,7 @@ endfor
 
 %% cleanup
 
-%ppdev_mex('Close', 1);
+ppdev_mex('Close', 1);
 Priority(0);
 PsychPortAudio('Close', pahandle);
 
