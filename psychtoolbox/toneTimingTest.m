@@ -60,13 +60,14 @@ audioStim = [audioStim'; audioStim'];  % two rows from same vector for stereo
 triggerL = 2000;  % trigger length in microseconds
 triggerVal = 10;  % trigger value
 % init parallel port control
-ppdev_mex('Open', 1);
+%ppdev_mex('Open', 1);
 
 
 %% PsychPortAudio setup
 
 PsychDefaultSetup(1);
 Priority(1);
+InitializePsychSound(1);
 
 % get correct audio device
 %% we only change audio device in the lab, when we see the correct audio
@@ -74,6 +75,7 @@ device = [];  % system default is our default as well
 tmpDevices = PsychPortAudio('GetDevices');
 % get card
 targetDev = 'samplerate';
+%targetDev = 'HDA Intel PCH: ALC3246 Analog';
 %targetDev = 'MAYA22 USB';
 for i = 1:numel(tmpDevices)
     if strncmp(tmpDevices(i).DeviceName, targetDev, length(targetDev))
@@ -124,7 +126,7 @@ for eventIdx = 1:eventNo
 
         % blocking playback start for precision
         onsets(eventIdx) = PsychPortAudio('Start', pahandle, 1, startTime, 1);
-        lptwrite(1, triggerVal, triggerL);
+%        lptwrite(1, triggerVal, triggerL);
 
         % adjust stimulus start time
         startTime = onsets(eventIdx) + period;
@@ -134,7 +136,7 @@ endfor
 
 %% cleanup
 
-ppdev_mex('Close', 1);
+%ppdev_mex('Close', 1);
 Priority(0);
 PsychPortAudio('Close', pahandle);
 
