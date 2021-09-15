@@ -359,6 +359,10 @@ try
     perf.cumoverrun = cumoverrun;
     perf.cumunderflow = cumunderflow;
     perf.xruns = xruns;
+    perf.playbackstart = playbackstart;
+    perf.capturestart = capturestart;
+    perf.offset = offset;
+    perf.reqonsettime = reqonsettime;
     
     % Done!
     disp([char(10), 'Done, closing shop']);
@@ -370,6 +374,7 @@ catch ME
     PsychPortAudio('Stop', pahandle);
     PsychPortAudio('GetAudioData', pahandle);
     PsychPortAudio('Close', pahandle);
+    sca;
     Priority(0);
     rethrow(ME);
     
