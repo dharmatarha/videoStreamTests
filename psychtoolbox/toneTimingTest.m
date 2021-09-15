@@ -1,8 +1,8 @@
-function onsets = toneTimingTest(eventNo, period)
+function onsets = toneTimingTest(eventNo, period, ttl)
 
 %% Function for testing audio tone onset timing
 %
-% USAGE: onsets = toneTimingTest(eventNo, period)
+% USAGE: onsets = toneTimingTest(eventNo, period, ttl)
 %
 % The function plays short tones "eventNo" times, with "period" interval 
 % between subsequent ones. Tones are accompanied by a TTL-type trigger.
@@ -10,21 +10,23 @@ function onsets = toneTimingTest(eventNo, period)
 %
 % Inputs:
 % eventNo       - Numeric value, integer in range 1:10^4. Number of flashes 
-%               and corresponding triggers
+%                   and corresponding triggers
 % period        - Numeric value, interval between events in secs. Should be 
-%               between 0.1 and 10. 
+%                   between 0.1 and 10. 
+% ttl               - Char array, one of {'ttl', 'nottl'}. Controlr if TTL triggers are used
+%                   or not.
 %
 % Outputs:
 % onsets        - Numeric vector, contains the onset timestamps for tones, as 
-%               reported by PsychPortAudio('Start').
+%                   reported by PsychPortAudio('Start').
 %
 %
 
 
 %% Input checks
 
-if nargin ~= 2
-    error('Function toneTimingTest requires inputs "eventNo" and "period"!');
+if nargin ~= 3
+    error('Function toneTimingTest requires inputs "eventNo", "period" and "ttl"!');
 endif
 if ~ismember(eventNo, 1:10^4)
     error('Input arg "eventNo" should be an integer value in range 1:10^4!');
@@ -32,10 +34,20 @@ endif
 if ~isnumeric(period) || period < 0.1 || period > 10
     error('Input arg "period" should be between 0.1 and 10!');
 endif
+if ~ischar(ttl) || ~ismember(ttl, {'ttl', 'nottl'})
+    error('Input arg "ttl" should be one of {"ttl", "nottl"}!');
+endif
+
+if strcmp(ttl, 'ttl')
+    ttlFlag = true;
+else
+    ttlFlag = false;
+endif
 
 disp([char(10), 'Called toneTimingTest with input args: ', ...
     char(10), 'Event number: ', num2str(eventNo), ...
-    char(10), 'Period: ', num2str(period), ' secs.']);
+    char(10), 'Period: ', num2str(period), ' secs.', ...
+    char(10), 'Triggers: ', num2str(ttlFlag)]);
 
 
 %% Generate sine wave for beep
@@ -57,10 +69,12 @@ audioStim = [audioStim'; audioStim'];  % two rows from same vector for stereo
 
 %% Trigger setup
 
-triggerL = 2000;  % trigger length in microseconds
-triggerVal = 10;  % trigger value
-% init parallel port control
-%ppdev_mex('Open', 1);
+if ttlFlag
+    triggerL = 2000;  % trigger length in microseconds
+    triggerVal = 10;  % trigger value
+    % init parallel port control
+    ppdev_mex('Open', 1);
+endif
 
 
 %% PsychPortAudio setup
@@ -126,7 +140,9 @@ for eventIdx = 1:eventNo
 
         % blocking playback start for precision
         onsets(eventIdx) = PsychPortAudio('Start', pahandle, 1, startTime, 1);
-%        lptwrite(1, triggerVal, triggerL);
+        if ttlFlag
+            lptwrite(1, triggerVal, triggerL);
+        endif
 
         % adjust stimulus start time
         startTime = onsets(eventIdx) + period;
@@ -136,7 +152,9 @@ endfor
 
 %% cleanup
 
-%ppdev_mex('Close', 1);
+if ttlFlag
+    ppdev_mex('Close', 1);
+endif
 Priority(0);
 PsychPortAudio('Close', pahandle);
 
