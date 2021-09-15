@@ -1,8 +1,8 @@
-function audioDuplex(varargin)
+function [recordedaudio, perf] = audioDuplex(varargin)
 
 %% Function for passing audio through (duplex mode) with PsychPortAudio
 %
-% USAGE: perf = audioDuplex(devName='MAYA22 USB', lat=0.1, maxLength=150)
+% USAGE: [recordedaudio, perf] = audioDuplex(devName='MAYA22 USB', lat=0.1, maxLength=150)
 %
 % Based on DelayedSoundFeedbackDemo of Psychtoolbox.
 %
@@ -65,13 +65,9 @@ disp([char(10), 'Called audioDuplex with input args: ',...
     
 %% Basic settings, params
 
-% preallocate audio data var, for two channels
-recordedaudio = zeros(2, maxLength*fs);
-recAudioCounter = 0;  % counter for recorded samples used later
-
 % store diagnostic timestamps in a huge array:
 tc = 0;
-tstats = zeros(4, 2000000);
+tstats = zeros(4, 3000000);  % with a captureQuantum of  ~3 ms, this is enough for ~150 mins
 
 % PsychPortAudio device options
 mode = 3;  % recording + playback
@@ -118,6 +114,10 @@ try
         fs = s.SampleRate;
         warning(['Sampling rate overriden by audio device, sampling rate is ', num2str(fs)]);
     endif
+    
+    % preallocate audio data var, for two channels
+    recordedaudio = zeros(2, maxLength*fs);
+    recAudioCounter = 0;  % counter for recorded samples used later    
     
        
     %% Test the performance if audio device with requested latency
@@ -326,6 +326,7 @@ try
     PsychPortAudio('Stop', pahandle);
     PsychPortAudio('GetAudioData', pahandle);
     PsychPortAudio('Close', pahandle);
+    Priority(0);
 
     if timingfailed > 0
         % There was trouble during execution
@@ -334,8 +335,13 @@ try
         fprintf('\nOverruns of capture buffer: %i. Underruns of audio output buffer: %i. Hardware xruns = %i\n', cumoverrun, cumunderflow, xruns);
     else
         fprintf('Requested roundtrip feedback latency of %f msecs seems to have worked. Please double-check with external equipment.\n\n', 1000 * lat);
-    end
+    endif
 
+    % Prune recorded audio
+    if recAudioCounter < size(recordedaudio, 2)
+        recordedaudio(:, recAudioCounter+1:end) = [];
+    endif
+    
     % Prune tstats to valid range:
     fprintf('Total of %i timesamples.\n', tc);
     tstats = tstats(:, 1:tc);
@@ -345,11 +351,22 @@ try
     tout(2:4,:) = tstats(2:4,idx);
     tstats = tout;    
     
+    % Collect various performance-related flags / vars into a struct
+    perf = struct;
+    perf.tstats = tstats;
+    perf.tc = tc;
+    perf.timingfailed = timingfailed;
+    perf.cumoverrun = cumoverrun;
+    perf.cumunderflow = cumunderflow;
+    perf.xruns = xruns;
+    
     % Done!
     disp([char(10), 'Done, closing shop']);
     
     
 catch ME
+    disp([char(10), char(10), 'Oops, stg went wrong!', char(10), char(10)]);
+    RestrictKeysForKbCheck([]);
     PsychPortAudio('Stop', pahandle);
     PsychPortAudio('GetAudioData', pahandle);
     PsychPortAudio('Close', pahandle);
@@ -357,7 +374,7 @@ catch ME
     rethrow(ME);
     
     
-end
+end  % try
 
 
 endfunction
