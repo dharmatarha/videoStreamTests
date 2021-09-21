@@ -4,7 +4,7 @@ function baseInteraction(pairNo, labName, gstSpec)
 % USAGE: baseInteraction(pairNo, labName, gstSpec='see below')
 %
 % Default "gstSpec":
-%  gstSpec = ['udpsrc port=19001 caps="application/x-rtp,media=',...
+%  gstSpec = ['udpsrc port=19008 caps="application/x-rtp,media=',...
 %    '(string)video,clock-rate=(int)90000,encoding-name=(string)RAW,sampling=',...
 %    '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1280,height=(string)720,',...
 %    'colorimetry=(string)SMPTE240M,payload=(int)96,a-framerate=(string)30" ',...
@@ -39,7 +39,7 @@ if ~ismember(nargin, 2:3)
     error('Input args "pairNo" are "labName" are required while "gstSpec" is optional!');
 endif
 if nargin == 2
-    gstSpec = ['udpsrc port=19001 caps="application/x-rtp,media=',...
+    gstSpec = ['udpsrc port=19008 caps="application/x-rtp,media=',...
     '(string)video,clock-rate=(int)90000,encoding-name=(string)RAW,sampling=',...
     '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1280,height=(string)720,',...
     'colorimetry=(string)SMPTE240M,payload=(int)96,a-framerate=(string)30" ',...
@@ -57,6 +57,9 @@ endif
 
 % filename for saving timestamps and other relevant vars
 savefile = ["pair", num2str(pairNo), labName, "_times.mat"];
+
+% remote IP
+remoteIP = "192.168.1.1";
 
 % video recording
 moviename = ["pair", num2str(pairNo), labName, ".mov"];
@@ -92,7 +95,7 @@ GetSecs; WaitSecs(0.1);  % dummy calls
 
 % Try to set video capture to custom pipeline
 try
-    Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', capturebinspec));
+    Screen('SetVideoCaptureParameter', -1, sprintf('SetNextCaptureBinSpec=%s', gstSpec));
 catch ME
     disp('Failed to set Screen(''SetVideoCaptureParameter''), errored out.');
     sca; 
@@ -193,10 +196,10 @@ catch ME
     RestrictKeysForKbCheck([]);
     sca;  % closes video too
     
-    % try to save major timestamps
-    save(savefile, "sharedStartTime", "videoCaptureStartTime",...
-    "frameCaptTime", "vidFrameCount", "flipTimestamps", "stopCaptureTime",...
-    "closeCaptureTime", "elapsedTime");
+##    % try to save major timestamps
+##    save(savefile, "sharedStartTime", "videoCaptureStartTime",...
+##    "frameCaptTime", "vidFrameCount", "flipTimestamps", "stopCaptureTime",...
+##    "closeCaptureTime", "elapsedTime");
     rethrow(ME);
     
     

@@ -93,7 +93,7 @@ while ~successFlag && (GetSecs-stageStart) < maxTimeOut
       % set flag for exiting the while loop
       successFlag = 1; 
       disp([char(10), 'Received message: ', char(incomingMessage)]);
-      disp('Received expected message in first stage, moving on.'];
+      disp(['Received expected message in first stage, moving on.']);
   % if there was no incoming packet or it did not match initMessage,
   % send initMessage  
   else
