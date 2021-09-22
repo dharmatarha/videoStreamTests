@@ -1,12 +1,12 @@
-function sharedStartTime = UDPhandshake(remoteIP, varargin)
+function sharedStartTime = UDPhandshake(remoteIP, remotePort, localPort, startDelay, maxDiff, maxTimeOut)
 %% Function to negotiate a common start time across systems on local network
 %
 % USAGE: sharedStartTime = UDPhandshake(remoteIP, 
-%                                                                   remotePort=9998, 
-%                                                                   localPort=9998, 
-%                                                                   startDelay=10, 
-%                                                                   maxDiff=0.1, 
-%                                                                   maxTimeOut=60)
+%                                       remotePort=9998, 
+%                                       localPort=9998, 
+%                                       startDelay=10, 
+%                                       maxDiff=0.1, 
+%                                       maxTimeOut=60)
 % 
 % The function solves the problem of starting processes approximately
 % synchronously across two machines linked on a local network.
@@ -46,7 +46,8 @@ elseif nargin < 6 || isempty(maxTimeOut)
     maxTimeOut = 60;  % maximum wait time for handshake to happen, in secs
 end
 if nargin < 5 || isempty(maxDiff)
-    maxDiff = 0.1;  % maximum difference of timestamps in second stage, in secs
+    %maxDiff = 0.1;  % maximum difference of timestamps in second stage, in secs
+    maxDiff = 0.5;  % maximum difference of timestamps in second stage, in secs
 end
 if nargin < 4 || isempty(startDelay)
     startDelay = 5;  % constant added to the average of second-stage timestamps to derive a timestamp in the future, in secs
@@ -67,6 +68,8 @@ end
 waitTime = 0.01;  % time between sending packets when repeatedly doing so, in both stages, in secs
 initMessage = 'kuldj egy jelet';  % initial "greetings" message
 remoteAddr = struct('addr', remoteIP, 'port', remotePort);
+timeStampLikeLimit = 100;  % maximum time difference in secs for reporting incoming packet as timestamp-like
+timeOffReportsMax = 3;  % maximum number of times to report if incoming packet is timestamp-like but not close enough (in terms of maxDiff)
   
 % Dummy calls for Psychtoolbox functions
 GetSecs; WaitSecs(0.1);
@@ -116,6 +119,7 @@ endif
 successFlag = 0;
 stageStart = GetSecs;
 timeMessage = num2str(stageStart, '%.5f');  % packet requires string or uint8
+timeOffCounter = 0;
 while ~successFlag && (GetSecs-stageStart)<maxTimeOut
   % try reading from the socket
   [incomingMessage, count] = recv(udpSocket, 512, MSG_DONTWAIT);  % non-blocking
@@ -126,8 +130,20 @@ while ~successFlag && (GetSecs-stageStart)<maxTimeOut
       send(udpSocket, timeMessage);
       % set flag for exiting the while loop
       successFlag = 1;
-      disp([char(10), 'Received message: ', str2double(char(incomingMessage))]);
+      disp([char(10), 'Received message: ', char(incomingMessage)]);
       disp([char(10), 'Received timestamp-like message in second stage, moving on.']);
+  % if there was incoming packet and it can be understood as a timestamp 
+  % but not close "enough" to timeMessage, report the discrepancy 
+  % and send timeMessage again
+  elseif count ~= -1 && abs(str2double(char(incomingMessage))-stageStart) >= maxDiff && ...
+          abs(str2double(char(incomingMessage))-stageStart) < timeStampLikeLimit  && ...
+          timeOffCounter < timeOffReportsMax 
+      timeOffCounter = timeOffCounter + 1;
+      disp([char(10), 'Received message: ', char(incomingMessage)]);
+      disp([char(10), 'Message is timestamp-like but off, suggests a ',...
+          'clock difference of ', num2str(str2double(char(incomingMessage))-stageStart), ...
+          ' secs. Resending time packet and waiting.']);
+      send(udpSocket, timeMessage);
   % if there was no incoming packet or it did not match timeMessage,
   % send timeMessage
   else
