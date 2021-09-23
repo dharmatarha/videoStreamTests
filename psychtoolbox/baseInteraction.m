@@ -4,9 +4,9 @@ function baseInteraction(pairNo, labName, gstSpec)
 % USAGE: baseInteraction(pairNo, labName, gstSpec='see below')
 %
 % Default "gstSpec":
-%  gstSpec = ['udpsrc port=19008 caps="application/x-rtp,media=',...
+%  gstSpec = ['udpsrc port=19009 caps="application/x-rtp,media=',...
 %    '(string)video,clock-rate=(int)90000,encoding-name=(string)RAW,sampling=',...
-%    '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1280,height=(string)720,',...
+%    '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1920,height=(string)1080,',...
 %    'colorimetry=(string)SMPTE240M,payload=(int)96,a-framerate=(string)30" ',...
 %    '! queue ! rtpvrawdepay ! videoconvert'];
 %
@@ -39,9 +39,9 @@ if ~ismember(nargin, 2:3)
     error('Input args "pairNo" are "labName" are required while "gstSpec" is optional!');
 endif
 if nargin == 2
-    gstSpec = ['udpsrc port=19008 caps="application/x-rtp,media=',...
+    gstSpec = ['udpsrc port=19009 caps="application/x-rtp,media=',...
     '(string)video,clock-rate=(int)90000,encoding-name=(string)RAW,sampling=',...
-    '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1280,height=(string)720,',...
+    '(string)YCbCr-4:2:0,depth=(string)8,width=(string)1920,height=(string)1080,',...
     'colorimetry=(string)SMPTE240M,payload=(int)96,a-framerate=(string)30" ',...
     '! queue ! rtpvrawdepay ! videoconvert'];
 endif
@@ -59,7 +59,7 @@ endif
 savefile = ["pair", num2str(pairNo), labName, "_times.mat"];
 
 % remote IP
-remoteIP = "192.168.1.1";
+remoteIP = "192.168.1.60";
 
 % video recording
 moviename = ["pair", num2str(pairNo), labName, ".mov"];
@@ -113,7 +113,7 @@ try
     
     
     % Open video capture device
-    grabber = Screen('OpenVideoCapture', win, -9, [], [], [], [], codec, vidRecFlags);
+    grabber = Screen('OpenVideoCapture', win, -9, [0 0 1920 1080], [], [], [], codec, vidRecFlags);
     % Wait a bit for OpenVideoCapture to return
     KbReleaseWait;
     WaitSecs('YieldSecs', 1);
@@ -209,7 +209,7 @@ end  % try
 disp([char(10), 'Requested (shared) start time was: ', num2str(vidcaptureStartTime)]);
 disp([char(10), 'Start of capture was: ', num2str(vidcaptureStartTime)]);
 disp([char(10), 'Difference: ', num2str(vidcaptureStartTime - sharedStartTime)]);
-disp([char(10), 'Total elapsed time from start of capture: ', num2str(telapsed)]); 
+disp([char(10), 'Total elapsed time from start of capture: ', num2str(elapsedTime)]); 
 
 
 endfunction

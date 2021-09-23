@@ -116,7 +116,7 @@ try
     endif
     
     % preallocate audio data var, for two channels
-    recordedaudio = zeros(2, maxLength*fs);
+    recordedaudio = zeros(2, (maxLength+3)*fs);
     recAudioCounter = 0;  % counter for recorded samples used later    
     
        

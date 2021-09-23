@@ -47,7 +47,7 @@ elseif nargin < 6 || isempty(maxTimeOut)
 end
 if nargin < 5 || isempty(maxDiff)
     %maxDiff = 0.1;  % maximum difference of timestamps in second stage, in secs
-    maxDiff = 0.5;  % maximum difference of timestamps in second stage, in secs
+    maxDiff = 10;  % maximum difference of timestamps in second stage, in secs
 end
 if nargin < 4 || isempty(startDelay)
     startDelay = 5;  % constant added to the average of second-stage timestamps to derive a timestamp in the future, in secs
