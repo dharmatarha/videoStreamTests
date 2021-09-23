@@ -1,0 +1,28 @@
+#!/usr/bin/env octave
+1;
+
+# parse input args
+arg_list = argv();
+pairNo = str2double(arg_list{1});
+labName = arg_list{2};
+disp(['Arg pairNo: ', num2str(pairNo)]);
+disp(['Arg labName: ', labName]);
+
+# params, settings
+audioMaxLength = 1800;
+latency = 0.180;
+wavFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.wav'];
+matFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.mat'];
+fs = 44100;  # MUST match fs defined in "audioChannel" 
+
+# target dir
+cd /home/adamb/videoStreamTests/psychtoolbox/
+
+# start audio channel
+[recordedAudio, perf] = audioChannel(latency, audioMaxLength);
+
+# save audio and performance variables
+psychwavwrite(recordedaudio, fs, wavFile);
+save(matFile, 'perf', 'pairNo', 'labName');
+
+
