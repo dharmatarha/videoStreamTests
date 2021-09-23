@@ -9,7 +9,7 @@ disp(['Arg pairNo: ', num2str(pairNo)]);
 disp(['Arg labName: ', labName]); 
 
 # target dir
-cd /home/adamb/videoStreamTests/psychtoolbox/
+cd ~/CommGame/videoStreamTests/psychtoolbox/
 
 # start audio channel
 videoChannel(pairNo, labName);

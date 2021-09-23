@@ -39,10 +39,10 @@ if ~isempty(varargin)
             devName = varargin{v};
         elseif isnumeric(varargin{v}) && varargin{v} >= 0 && varargin{v} <= 10 && ~exist('lat', 'var')
             lat = varargin{v};
-        elseif isnumeric(varargin{v}) && varargin{v} > 10 && varargin{v} <=1000 && ~exist('maxLength', 'var')
+        elseif isnumeric(varargin{v}) && varargin{v} > 10 && varargin{v} <=10000 && ~exist('maxLength', 'var')
             maxLength = varargin{v};
         else
-            error('At least one input arg to function audioDuplex could not be matched with its expected args ("devName", "lat" and "maxLength")!');
+            error('At least one input arg to function audioChannel could not be matched with its expected args ("devName", "lat" and "maxLength")!');
         endif
     endfor
 endif

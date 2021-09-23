@@ -16,13 +16,13 @@ matFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.mat'];
 fs = 44100;  # MUST match fs defined in "audioChannel" 
 
 # target dir
-cd /home/adamb/videoStreamTests/psychtoolbox/
+cd ~/CommGame/videoStreamTests/psychtoolbox/
 
 # start audio channel
 [recordedAudio, perf] = audioChannel(latency, audioMaxLength);
 
 # save audio and performance variables
-psychwavwrite(recordedaudio, fs, wavFile);
+audiowrite(wavFile, recordedAudio, fs);
 save(matFile, 'perf', 'pairNo', 'labName');
 
 
