@@ -22,7 +22,7 @@ cd ~/CommGame/videoStreamTests/psychtoolbox/
 [recordedAudio, perf] = audioChannel(latency, audioMaxLength);
 
 # save audio and performance variables
-audiowrite(wavFile, recordedAudio, fs);
-save(matFile, 'perf', 'pairNo', 'labName');
+save(matFile, 'perf', 'pairNo', 'labName', 'recordedAudio');
+audiowrite(wavFile, recordedAudio, fs, 'BitsPerSample', 16);
 
 
