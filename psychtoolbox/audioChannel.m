@@ -12,7 +12,7 @@ function [recordedaudio, perf] = audioChannel(varargin)
 % to push the input out with "lat" latency. Builds heavily upon PsychDemos
 % examples. 
 %
-% Aborts for ESC.
+% Aborts for "q".
 %
 % Inputs:
 % devName       - Char array, name of the audio device to use. Defaults to
@@ -253,9 +253,9 @@ try
     startTime = GetSecs;
     while GetSecs < startTime + maxLength
         
-        % check for ESCAPE
+        % check for abort
         [keyIsDown, ~, keyCode] = KbCheck;
-        if keyIsDown && keyCode(KbName('ESCAPE'))
+        if keyIsDown && keyCode(KbName('q'))
             disp([char(10), 'User requested abort...']);
             break;
         endif
