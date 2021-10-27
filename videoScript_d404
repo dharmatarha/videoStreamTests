@@ -1,0 +1,16 @@
+#!/usr/bin/env octave
+1;
+
+# parse input args
+arg_list = argv();
+pairNo = str2double(arg_list{1});
+labName = arg_list{2};
+disp(['Arg pairNo: ', num2str(pairNo)]);
+disp(['Arg labName: ', labName]); 
+
+# target dir
+cd ~/videoStreamTests/psychtoolbox/
+
+# start audio channel
+videoChannel_d404(pairNo, labName);
+

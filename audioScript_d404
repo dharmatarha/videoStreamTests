@@ -16,10 +16,10 @@ matFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.mat'];
 fs = 44100;  # MUST match fs defined in "audioChannel" 
 
 # target dir
-cd ~/CommGame/videoStreamTests/psychtoolbox/
+cd ~/videoStreamTests/psychtoolbox/
 
 # start audio channel
-[recordedAudio, perf] = audioChannel(latency, audioMaxLength);
+[recordedAudio, perf] = audioChannel_d404(latency, audioMaxLength);
 
 # save audio and performance variables
 save(matFile, 'perf', 'pairNo', 'labName', 'recordedAudio');
