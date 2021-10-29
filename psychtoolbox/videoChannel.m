@@ -56,13 +56,13 @@ endif
 %% Constants, params, setup
 
 % filename for saving timestamps and other relevant vars
-savefile = ["pair", num2str(pairNo), labName, "_times.mat"];
+savefile = ["pair", num2str(pairNo), "_", labName, "_times.mat"];
 
 % remote IP, depends on lab name
 if strcmp(labName, "Mordor")
-    remoteIP = "192.168.1.60";
+    remoteIP = "192.168.1.20";
 elseif strcmp(labName, "Gondor")
-    remoteIP = "192.168.1.1";
+    remoteIP = "192.168.1.10";
 endif
 
 % video recording

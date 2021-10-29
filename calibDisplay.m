@@ -11,9 +11,9 @@ try
   stopMarkerTime = 5;
   
   % load img
-  fileP = "/home/gondor/Desktop/pupil_calib_marker.jpg";
+  fileP = "/home/mordor/pupil_calib_marker.jpg";
   markerImg = imread(fileP);
-  fileP = "/home/gondor/Desktop/pupil_calib_stop_marker.jpg";
+  fileP = "/home/mordor/pupil_calib_stop_marker.jpg";
   markerStopImg = imread(fileP);
 
   onWin = Screen("OpenWindow", screen);

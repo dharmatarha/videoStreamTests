@@ -8,9 +8,9 @@ echo "Input arg labName: "$2
 
 # set IP of remote PC based on lab names
 if [ "$2" == "Mordor" ]; then
-  REMOTEIP="192.168.1.60"
+  REMOTEIP="192.168.1.20"
 elif [ "$2" == "Gondor" ]; then
-  REMOTEIP="192.168.1.1"
+  REMOTEIP="192.168.1.10"
 fi
 
 # go to relevant dir
