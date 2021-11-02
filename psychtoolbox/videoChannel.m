@@ -56,13 +56,13 @@ endif
 %% Constants, params, setup
 
 % filename for saving timestamps and other relevant vars
-savefile = ["pair", num2str(pairNo), labName, "_times.mat"];
+savefile = ["pair", num2str(pairNo), "_", labName, "_times.mat"];
 
 % remote IP, depends on lab name
 if strcmp(labName, "Mordor")
-    remoteIP = "192.168.1.60";
+    remoteIP = "192.168.1.20";
 elseif strcmp(labName, "Gondor")
-    remoteIP = "192.168.1.1";
+    remoteIP = "192.168.1.10";
 endif
 
 % video recording
@@ -72,7 +72,7 @@ codec = ':CodecType=DEFAULTencoder';  % default codec
 codec = [moviename, codec];
 
 % video settings
-waitForImage = 1;  % setting for Screen('GetCapturedImage'), 0 = polling (non-blocking); 1 = blocking wait for next image
+waitForImage = 0;  % setting for Screen('GetCapturedImage'), 0 = polling (non-blocking); 1 = blocking wait for next image
 vidSamplingRate = 30;  % expected video sampling rate, real sampling rate will differ
 vidDropFrames = 1;  % dropframes flag for StartVideoCapture, 0 = do not drop frames; 1 = drop frame if necessary, only return the last captured frame
 vidRecFlags = 16;  % recordingflags arg for OpenVideoCapture, 16 = use parallel thread in background; consider adding 1, 32, 128, 2048, 4096
@@ -124,6 +124,7 @@ try
     
     % Start capture 
     [reportedSamplingRate, vidcaptureStartTime] = Screen('StartVideoCapture', grabber, vidSamplingRate, vidDropFrames, sharedStartTime);
+    disp('Started video capture');
     % Check the reported sampling rate, compare to requested rate
     if reportedSamplingRate ~= vidSamplingRate
         warning(['Reported sampling rate from Screen(''StartVideoCapture'') is ', ...
