@@ -136,6 +136,7 @@ try
 
     % start audio playback right away
     playbackstart = PsychPortAudio('Start', pahandle, 0, 0, 1);
+    fprintf('Started playback\n');
 
     % This flag will indicate failure to achieve the wanted sound onset timing
     % / latency. An experiment script would abort or reject a trial with a

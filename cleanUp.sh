@@ -3,9 +3,10 @@
 # USAGE: ./cleanUp.sh
 #
 # Main clean-up steps:
-# (1) Cleans up lingering octave / psychtoolbox / gstreamer processes 
+# (1) Cleans up lingering octave / psychtoolbox / gstreamer / sound processes 
 # after a botched run of freeConv.sh or its bargaining game equivalent
 # (2) Reloads the audio system via systemd
+# (3) Resets USB connections to the sound card and webcam we rely on
 #
 
 # kill all target processes

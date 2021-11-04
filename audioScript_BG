@@ -5,21 +5,23 @@
 arg_list = argv();
 pairNo = str2double(arg_list{1});
 labName = arg_list{2};
+gameCounter = str2double(arg_list{3});
 disp(['Arg pairNo: ', num2str(pairNo)]);
 disp(['Arg labName: ', labName]);
+disp(['Arg gameCounter: ', num2str(gameCounter)]);
 
 # params, settings
 audioMaxLength = 1800;
 latency = 0.180;
-wavFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.wav'];
-matFile = ['pair', num2str(pairNo), '_', labName, '_audio_free.mat'];
+wavFile = ['pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), 'audio_free.wav'];
+matFile = ['pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), 'audio_free.mat'];
 fs = 44100;  # MUST match fs defined in "audioChannel" 
 
 # target dir
-cd ~/videoStreamTests/psychtoolbox/
+cd ~/CommGame/videoStreamTests/psychtoolbox/
 
 # start audio channel
-[recordedAudio, perf] = audioChannel_d404(latency, audioMaxLength);
+[recordedAudio, perf] = audioChannel(latency, audioMaxLength);
 
 # save audio and performance variables
 save(matFile, 'perf', 'pairNo', 'labName', 'recordedAudio');
