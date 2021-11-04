@@ -1,4 +1,11 @@
 #!/usr/bin/env octave
+#
+# Octave script for playing the video from an RTP stream sent by a remote gstreamer process.
+# To be called from the command line or via freeConv.sh
+#
+# Inputs are positional arguments pairNo (int, 1:99) and labName (str, Mordor/Gondor).
+# Outputs are saved into the results dir of the pair under /home/mordor/CommGame/
+#
 1;
 
 # parse input args
