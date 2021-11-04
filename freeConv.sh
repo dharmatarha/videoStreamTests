@@ -14,14 +14,14 @@ if [[ $# -ne 2 ]] ; then
     echo "Input args PAIRNO and LABNAME are required!"
     exit 1
 fi
-if (( $2 > 0 && $2 < 100)) ; then
-    PAIRNO=$2
+if (( $1 > 0 && $1 < 100)) ; then
+    PAIRNO=$1
 else
     echo "Input arg PAIRNO should be integer between 1 and 99!"
     exit 2
 fi    
-if [[ $1 == "Mordor" ]] || [[ $1 == "Gondor" ]] ; then
-    LABNAME=$1
+if [[ $2 == "Mordor" ]] || [[ $2 == "Gondor" ]] ; then
+    LABNAME=$2
 else
     echo "Input arg LABNAME should be either Mordor or Gondor!"
     exit 3
@@ -30,11 +30,11 @@ fi
 
 # check for result dir for pair
 RESULTDIR="/home/mordor/CommGame/pair"$PAIRNO
-if [[ -d RESULTDIR ]] ; then
+if [[ -d "$RESULTDIR" ]] ; then
     echo -e "\nResult folder for pair "$PAIRNO" already exists."
 else
     MKDIR_RETVAL=$(mkdir $RESULTDIR)
-    if [[ MKDIR_RETVAL == 0 ]] ; then
+    if [[ -z "$MKDIR_RETVAL" ]] ; then
         echo -e "\nCreated results directory for pair "$PAIRNO
     else
         echo -e "\nFailed to create results directory at "$RESULTDIR"!"

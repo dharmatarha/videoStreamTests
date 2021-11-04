@@ -74,22 +74,11 @@ fi
 
 # check for other PCs on LAN using ssh
 echo -e "\nChecking network connections..."
+echo "Trying to connect to other control PC..."
+ssh -o ConnectTimeout=5 mordor@$REMOTE_IP echo "Connection to other control PC is OK!"
+echo "Trying to connect to motion control PC..."
+ssh -o ConnectTimeout=5 mordor@$MOTIONPC_IP echo "Connection to other control PC is OK!"
 
-REMOTE_SSH_RETVALUE=$(ssh -o ConnectTimeout=5 -q mordor@$REMOTE_IP exit)
-if [[ $REMOTE_SSH_RETVALUE -ne 0 ]] ; then
-    echo "Remote control PC is not reachable via SSH, return value: "$REMOTE_SSH_RETVALUE
-    exit 5
-else
-    echo "Remote control PC is reachable via SSH, OK"
-fi
-
-MOTIONPC_SSH_RETVALUE=$(ssh -o ConnectTimeout=5 -q mordor@$MOTIONPC_IP exit)
-if [[ $MOTIONPC_SSH_RETVALUE -ne 0 ]] ; then
-    echo "Motion control PC is not reachable via SSH, return value: "$MOTIONPC_SSH_RETVALUE
-    exit 6
-else
-    echo "Motion control PC is reachable via SSH, OK"
-fi
 
 
 exit 0
