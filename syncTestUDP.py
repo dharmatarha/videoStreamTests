@@ -375,7 +375,7 @@ def main(ip, portIn, portOut, portComm):
     # report basics
     diffsIn = inData[:, 0]-inData[:, 1]
     print('Median difference between remote and local timestamps for incoming packets: \n',
-          str(np.median(diffsIn)))
+          "{:.8f}".format(np.median(diffsIn)))
 
     # user end message
     print('\n Its been fun, so long, etc. You take care now')
