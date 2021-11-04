@@ -252,6 +252,7 @@ try
     %% Audio fetch + push loop
 
     startTime = GetSecs;
+    firstFrameTiming = 0;
     while GetSecs < startTime + maxLength
         
         % check for abort
@@ -277,7 +278,10 @@ try
 
         % Get new captured sound data ...
         fetchDelay = GetSecs;
-        [audiodata, offset, overrun] = PsychPortAudio('GetAudioData', pahandle, [], captureQuantum);
+        [audiodata, offset, overrun, cstarttime] = PsychPortAudio('GetAudioData', pahandle, [], captureQuantum);
+        if firstFrameTiming == 0
+            firstFrameTiming = cstarttime;
+        endif
         fetchDelay = GetSecs - fetchDelay;
         underflow = 0;
     
@@ -370,6 +374,7 @@ try
     perf.capturestart = capturestart;
     perf.offset = offset;
     perf.reqonsettime = reqonsettime;
+    perf.firstFrameTiming = firstFrameTiming;
     
     % Done!
     disp([char(10), 'Done, closing shop']);

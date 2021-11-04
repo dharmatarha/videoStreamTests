@@ -56,7 +56,8 @@ endif
 %% Constants, params, setup
 
 % filename for saving timestamps and other relevant vars
-savefile = ["pair", num2str(pairNo), "_", labName, "_times.mat"];
+resDir = ["/home/mordor/CommGame/pair", num2str(pairNo), "/"];
+savefile = [resDir, "pair", num2str(pairNo), "_", labName, "_freeConv_videoTimes.mat"];
 
 % remote IP, depends on lab name
 if strcmp(labName, "Mordor")
@@ -66,8 +67,8 @@ elseif strcmp(labName, "Gondor")
 endif
 
 % video recording
-moviename = ["pair", num2str(pairNo), labName, ".mov"];
-vidLength = 3600;  % maximum length for video in secs
+moviename = [resDir, "pair", num2str(pairNo), "_", labName, "_freeConv.mov"];
+vidLength = 1800;  % maximum length for video in secs
 codec = ':CodecType=DEFAULTencoder';  % default codec
 codec = [moviename, codec];
 

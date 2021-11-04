@@ -1,15 +1,52 @@
 #!/bin/bash
 #
-# USAGE: ./freeConv.sh "pairNo" "labName"
-# positional argments should be "pairNo" (int) and "labName" (str, Gondor or Mordor)
+# USAGE: ./freeConv.sh PAIRNO LABNAME
+# positional argments should be PAIRNO (int) and LABNAME (str, Gondor or Mordor)
+#
+# Script to start all elements of the free conversation task
+#
 
-echo "Input arg pairNo: "$1
-echo "Input arg labName: "$2
+echo -e "\nInput arg PAIRNO: "$1
+echo "Input arg LABNAME: "$2
+
+# check for input args
+if [[ $# -ne 2 ]] ; then
+    echo "Input args PAIRNO and LABNAME are required!"
+    exit 1
+fi
+if (( $2 > 0 && $2 < 100)) ; then
+    PAIRNO=$2
+else
+    echo "Input arg PAIRNO should be integer between 1 and 99!"
+    exit 2
+fi    
+if [[ $1 == "Mordor" ]] || [[ $1 == "Gondor" ]] ; then
+    LABNAME=$1
+else
+    echo "Input arg LABNAME should be either Mordor or Gondor!"
+    exit 3
+fi
+
+
+# check for result dir for pair
+RESULTDIR="/home/mordor/CommGame/pair"$PAIRNO
+if [[ -d RESULTDIR ]] ; then
+    echo -e "\nResult folder for pair "$PAIRNO" already exists."
+else
+    MKDIR_RETVAL=$(mkdir $RESULTDIR)
+    if [[ MKDIR_RETVAL == 0 ]] ; then
+        echo -e "\nCreated results directory for pair "$PAIRNO
+    else
+        echo -e "\nFailed to create results directory at "$RESULTDIR"!"
+        exit 4
+    fi
+fi     
+    
 
 # set IP of remote PC based on lab names
-if [ "$2" == "Mordor" ]; then
+if [ "$LABNAME" == "Mordor" ]; then
   REMOTEIP="192.168.1.20"
-elif [ "$2" == "Gondor" ]; then
+elif [ "$LABNAME" == "Gondor" ]; then
   REMOTEIP="192.168.1.10"
 fi
 
@@ -24,18 +61,20 @@ VIDEODEVICE=$(v4l2-ctl --list-devices | grep -A 1 "C925e" | grep '/dev/video.*')
 
 # start Gstreamer webcam feed
 GSTCOMMAND="gst-launch-1.0 -v v4l2src device="$VIDEODEVICE" ! image/jpeg,width=1920,height=1080,framerate=30/1 ! jpegdec ! queue ! videoconvert ! rtpvrawpay ! udpsink host="$REMOTEIP" port=19009 sync=false" 
-STREAMLOG=$1"_"$2"_camStreamLog.txt"
+STREAMLOG=$RESULTDIR"/pair"$PAIRNO"_"$LABNAME"_freeConv_camStreamLog.txt"
 gnome-terminal --window -- bash -ic "$GSTCOMMAND 2>&1 | tee $STREAMLOG; exec bash" &
 
 # sleep between starting sub processes
 sleep 5s
 
 # start audio channel
-AUDIOLOG=$1"_"$2"_audioChannelLog.txt" 
-gnome-terminal --window -- bash -ic "audioScript $1 $2 2>&1 | tee $AUDIOLOG; exec bash" &
+AUDIOLOG=$RESULTDIR"/pair"$PAIRNO"_"$LABNAME"_freeConv_audioChannelLog.txt" 
+gnome-terminal --window -- bash -ic "audioScript $PAIRNO $LABNAME 2>&1 | tee $AUDIOLOG; exec bash" &
 
 sleep 5s
 
 # start video channel
-VIDEOLOG=$1"_"$2"_videoChannelLog.txt" 
-gnome-terminal --window -- bash -ic "videoScript $1 $2 2>&1 | tee $VIDEOLOG; exec bash"
+VIDEOLOG=$RESULTDIR"/pair"$PAIRNO"_"$LABNAME"_freeConv_videoChannelLog.txt" 
+gnome-terminal --window -- bash -ic "videoScript $PAIRNO $LABNAME 2>&1 | tee $VIDEOLOG; exec bash"
+
+

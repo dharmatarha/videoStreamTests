@@ -14,12 +14,14 @@
 # 
 
 
+echo -e "\nInput arg LABNAME: "$1
+
 # check for input args
 if [[ $# -eq 0 ]] ; then
     echo "Input arg LABNAME is required (Mordor/Gondor)"
     exit 1
 fi
-if [[ $1 = "Mordor" ]] | [[ $1 = "Gondor" ]] ; then
+if [[ $1 == "Mordor" ]] || [[ $1 == "Gondor" ]] ; then
     LABNAME=$1
 else
     echo "Input arg LABNAME should be either Mordor or Gondor!"
@@ -29,19 +31,19 @@ fi
 MOTIONPC_IP="192.168.1.30"
 
 # assign expected IPs on LAN based on LABNAME
-if [[ $LABNAME = "Mordor" ]] ; then
+if [[ $LABNAME == "Mordor" ]] ; then
     EXPECTED_IP="192.168.1.10"
     REMOTE_IP="192.168.1.20"
-elif [[ $LABNAME = "Gondor" ]] ; then
+elif [[ $LABNAME == "Gondor" ]] ; then
     EXPECTED_IP="192.168.1.20"
     REMOTE_IP="192.168.1.10"
 fi
 
 # get the first IP address for "inet" in the "enp2s0" section   
-echo "Checking IP address..."
-REAL_IP=$(ip address | grep -A3 enp2s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+echo -e "\nChecking IP address..."
+REAL_IP=$(ip address | grep -A3 enp9s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 # compare real ip to expected value
-if [ $REAL_IP = $EXPECTED_IP ] ; then
+if [ $REAL_IP == $EXPECTED_IP ] ; then
     echo "IP address is "$REAL_IP", CORRECT"
 else
     echo "IP address is "$REAL_IP", INCORRECT"
@@ -50,39 +52,39 @@ fi
 
 
 # check for webcam
-echo "Checking webcam..."
+echo -e "\nChecking webcam..."
 VIDEODEVICE=$(v4l2-ctl --list-devices | grep -A 1 "C925e" | grep '/dev/video.*')  # remains empty if webcam is not found
 if [ -z $VIDEODEVICE ] ; then
     echo "Webcam not found!"
     exit 3
 else
-    echo "Webcam found at "$VIDEODEVICE
+    echo -e "Webcam found at: \n "$VIDEODEVICE
 fi
 
 # check for sound card
-echo "Checking sound card..."
-SOUNDCARD=$(lsusb | grep MAYA22 USB)  # remains empty if sound card is not found
-if [ -z $SOUNDCARD ] ; then
+echo -e "\nChecking sound card..."
+SOUNDCARD=$(lsusb | grep "MAYA22 USB")  # remains empty if sound card is not found
+if [[ -z $SOUNDCARD ]] ; then
     echo "MAYA22 sound card not found!"
     exit 4
 else
-    echo "MAYA22 sound card found at "$VIDEODEVICE
+    echo -e "MAYA22 sound card found at: \n"$SOUNDCARD
 fi
 
 
 # check for other PCs on LAN using ssh
-echo "Checking network connections..."
+echo -e "\nChecking network connections..."
 
 REMOTE_SSH_RETVALUE=$(ssh -o ConnectTimeout=5 -q mordor@$REMOTE_IP exit)
-if [ $REMOTE_SSH_RETVALUE -ne 0 ] ; then
+if [[ $REMOTE_SSH_RETVALUE -ne 0 ]] ; then
     echo "Remote control PC is not reachable via SSH, return value: "$REMOTE_SSH_RETVALUE
     exit 5
 else
-    echo "Remote control PC is reachabel via SSH, OK"
+    echo "Remote control PC is reachable via SSH, OK"
 fi
 
 MOTIONPC_SSH_RETVALUE=$(ssh -o ConnectTimeout=5 -q mordor@$MOTIONPC_IP exit)
-if [ $MOTIONPC_SSH_RETVALUE -ne 0 ] ; then
+if [[ $MOTIONPC_SSH_RETVALUE -ne 0 ]] ; then
     echo "Motion control PC is not reachable via SSH, return value: "$MOTIONPC_SSH_RETVALUE
     exit 6
 else
