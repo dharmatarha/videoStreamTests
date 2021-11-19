@@ -13,8 +13,9 @@ disp(['Arg gameCounter: ', num2str(gameCounter)]);
 # params, settings
 audioMaxLength = 1800;
 latency = 0.180;
-wavFile = ['pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), 'audio_free.wav'];
-matFile = ['pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), 'audio_free.mat'];
+resultDir = ['/home/mordor/CommGame/pair', num2str(pairNo), '/'];
+wavFile = [resultDir, 'pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), '_audio.wav'];
+matFile = [resultDir, 'pair', num2str(pairNo), '_', labName, '_BG', num2str(gameCounter), '_audio.mat'];
 fs = 44100;  # MUST match fs defined in "audioChannel" 
 
 # target dir
@@ -24,7 +25,7 @@ cd ~/CommGame/videoStreamTests/psychtoolbox/
 [recordedAudio, perf] = audioChannel(latency, audioMaxLength);
 
 # save audio and performance variables
-save(matFile, 'perf', 'pairNo', 'labName', 'recordedAudio');
+save(matFile, 'perf', 'pairNo', 'labName');
 audiowrite(wavFile, recordedAudio', fs, 'BitsPerSample', 16);
 
 

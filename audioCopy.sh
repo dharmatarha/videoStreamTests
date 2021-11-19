@@ -14,14 +14,14 @@ if [[ $# -ne 2 ]] ; then
     echo "Input args PAIRNO and LABNAME are required!"
     exit 1
 fi
-if (( $2 > 0 && $2 < 100)) ; then
-    PAIRNO=$2
+if (( $1 > 0 && $1 < 100)) ; then
+    PAIRNO=$1
 else
     echo "Input arg PAIRNO should be integer between 1 and 99!"
     exit 2
 fi    
-if [[ $1 == "Mordor" ]] || [[ $1 == "Gondor" ]] ; then
-    LABNAME=$1
+if [[ $2 == "Mordor" ]] || [[ $2 == "Gondor" ]] ; then
+    LABNAME=$2
 else
     echo "Input arg LABNAME should be either Mordor or Gondor!"
     exit 3
