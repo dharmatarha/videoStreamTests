@@ -28,7 +28,7 @@ else
 fi
 
 # hardcoded expected IP value for motion PC
-MOTIONPC_IP="192.168.1.30"
+MOTIONPC_IP="192.168.1.50"
 
 # assign expected IPs on LAN based on LABNAME
 if [[ $LABNAME == "Mordor" ]] ; then
@@ -59,6 +59,7 @@ if [ -z $VIDEODEVICE ] ; then
     exit 3
 else
     echo -e "Webcam found at: \n "$VIDEODEVICE
+    echo "Webcam is CORRECT"
 fi
 
 # check for sound card
@@ -69,15 +70,17 @@ if [[ -z $SOUNDCARD ]] ; then
     exit 4
 else
     echo -e "MAYA22 sound card found at: \n"$SOUNDCARD
+    echo "Sound card is CORRECT"
 fi
 
 
 # check for other PCs on LAN using ssh
 echo -e "\nChecking network connections..."
-echo "Trying to connect to other control PC..."
-ssh -o ConnectTimeout=5 mordor@$REMOTE_IP echo "Connection to other control PC is OK!"
-echo "Trying to connect to motion control PC..."
-ssh -o ConnectTimeout=5 mordor@$MOTIONPC_IP echo "Connection to other control PC is OK!"
+echo "Trying to connect to REMOTE CONTROL PC..."
+ssh -o ConnectTimeout=5 mordor@$REMOTE_IP echo "Connection to REMOTE CONTROL PC is open, CORRECT!"
+echo -e "\nChecking network connections..."
+echo "Trying to connect to MOTION CONTROL PC..."
+ssh -o ConnectTimeout=5 mordor@$MOTIONPC_IP echo "Connection to MOTION CONTROL PC is open, CORRECT!"
 
 
 

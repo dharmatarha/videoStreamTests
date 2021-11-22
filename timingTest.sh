@@ -50,7 +50,9 @@ else
 fi     
 
 # hardcoded expected IP value for motion PC
-MOTIONPC_IP="192.168.1.30"
+MOTIONPC_IP="192.168.1.50"
+# hardcoded threshold for issuing timing warning, in ms
+SYNC_THRESHOLD=3
 
 # assign expected IPs on LAN based on LABNAME
 if [[ $LABNAME == "Mordor" ]] ; then
@@ -70,7 +72,7 @@ REMOTE_TIMINGFILE=$RESULTDIR"/remoteTiming_"$OTHERLAB"_"$CURRENT_TIME".txt"
 LOCAL_TIMINGFILE=$RESULTDIR"/localTiming_"$LABNAME"_"$CURRENT_TIME".txt"
 
 # run ssh and local versions of timing tests
-echo -e "\nRunning the timing functions...\n"
+echo -e "\nRunning the timing functions, this takes a few seconds...\n"
 ssh "mordor@"$REMOTE_IP "python3 ~/CommGame/videoStreamTests/syncTestUDP.py -i "$LOCAL_IP > $REMOTE_TIMINGFILE &
 python3 ~/CommGame/videoStreamTests/syncTestUDP.py -i $REMOTE_IP > $LOCAL_TIMINGFILE
 wait
@@ -88,7 +90,7 @@ TRANSMISSION_TIME=$(echo "scale=8; ("$REMOTE_TIME" + "$LOCAL_TIME")/2*1000" | bc
 CLOCK_DRIFT=$(echo "scale=8; ("$LOCAL_TIME" - "$REMOTE_TIME")/2*1000" | bc -l)
 echo -e "\nTransmission time was "$TRANSMISSION_TIME" ms"
 echo -e "\nClock drift was "$CLOCK_DRIFT" ms (positive value means local clock ahead of remote)"
-if [[ $(echo $TRANSMISSION_TIME"<5" | bc) ]] && [[ $(echo $CLOCK_DRIFT"<5" | bc) ]] ; then
+if [[ $(echo $TRANSMISSION_TIME"<"$SYNC_THRESHOLD | bc) == 1 ]] && [[ $(echo $CLOCK_DRIFT"<"$SYNC_THRESHOLD | bc) == 1 ]] ; then
     echo -e "\nThese numbers are OK!"
 else
     echo -e "\nAt least one of these numbers is NOT OK! Make a note!"
